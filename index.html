@@ -339,8 +339,8 @@
         }
 
         .hero-brand-logo {
-            height: 52px;
-            width: auto;
+            height: auto;
+            width: 30vw;
             margin-bottom: 6px;
         }
 
@@ -607,8 +607,8 @@
         }
 
         .menu-thumb {
-            width: 88px;
-            height: 66px;
+            width: 108px;
+            height: 81px;
             object-fit: cover;
             display: block;
             flex-shrink: 0;
@@ -668,13 +668,43 @@
 
         .menu-more-btn:hover { background: var(--gold-light); }
 
-        /* 簡易表示行（価格なし） */
-        .menu-simple-row {
+        /* 簡易表示：2列×2行グリッド */
+        .menu-simple-grid {
             display: grid;
-            grid-template-columns: 88px 1fr;
-            align-items: center;
-            gap: 16px;
-            padding: 16px 4px;
+            grid-template-columns: 1fr 1fr;
+            gap: 2px;
+            border-top: 1px solid rgba(90,80,69,0.15);
+        }
+
+        .menu-simple-grid .menu-list-item {
+            border-bottom: none;
+            border-right: 1px solid rgba(90,80,69,0.15);
+        }
+
+        .menu-simple-grid .menu-list-item:nth-child(2n) {
+            border-right: none;
+        }
+
+        .menu-simple-grid .menu-list-item:nth-child(n+3) {
+            border-top: 1px solid rgba(90,80,69,0.15);
+        }
+
+        .menu-simple-row {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        .menu-simple-row .menu-thumb {
+            width: 100%;
+            height: auto;
+            object-fit: contain;
+            background: #00000000;
+        }
+
+        .menu-simple-row .menu-info {
+            padding: 14px 14px 16px;
+            flex: 1;
         }
 
         /* 夏季停止・夜限定などのタグ */
@@ -967,44 +997,117 @@
         ============================================================ */
         .sns-sec {
             background: var(--black2);
-            padding: 60px 0;
+            padding: 80px 0;
         }
 
         .sns-inner {
-            max-width: 480px;
+            max-width: 640px;
             margin: 0 auto;
             padding: 0 24px;
             text-align: center;
         }
 
         .sns-links {
-            display: flex;
-            flex-direction: column;
-            gap: 14px;
-            margin-top: 36px;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 16px;
+            margin-top: 40px;
+        }
+
+        @media (min-width: 540px) {
+            .sns-links { grid-template-columns: 1fr 1fr; }
+            .sns-links .sns-link:last-child:nth-child(odd) {
+                grid-column: 1 / -1;
+                max-width: 50%;
+                margin: 0 auto;
+                width: 100%;
+            }
         }
 
         .sns-link {
             display: flex;
+            flex-direction: column;
             align-items: center;
-            gap: 14px;
-            padding: 16px 20px;
-            border: 1px solid rgba(200,168,75,0.2);
+            justify-content: center;
+            gap: 10px;
+            padding: 28px 20px;
             text-decoration: none;
-            color: #d4c8b0;
-            font-size: 0.9rem;
-            letter-spacing: 0.1em;
-            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.3s ease;
         }
 
-        .sns-link:hover {
-            border-color: var(--gold);
+        .sns-link:hover { transform: translateY(-3px); }
+
+        /* Instagram */
+        .sns-link.sns-insta {
+            background: linear-gradient(135deg, #833ab4 0%, #c13584 40%, #e1306c 65%, #fd1d1d 100%);
+        }
+
+        .sns-link.sns-insta::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: rgba(0,0,0,0.15);
+            transition: opacity 0.3s;
+        }
+
+        .sns-link.sns-insta:hover::after { opacity: 0; }
+
+        /* Uber Eats */
+        .sns-link.sns-uber {
+            background: #142328;
+            border: 1px solid rgba(6,193,103,0.3);
+        }
+
+        .sns-link.sns-uber:hover {
+            background: #1a2e34;
+            border-color: rgba(6,193,103,0.6);
+        }
+
+        /* Online Shop */
+        .sns-link.sns-shop {
+            background: var(--black3);
+            border: 1px solid rgba(200,168,75,0.2);
+        }
+
+        .sns-link.sns-shop:hover {
+            border-color: rgba(200,168,75,0.5);
             background: rgba(200,168,75,0.05);
-            color: var(--gold-light);
         }
 
-        .sns-link .sns-icon { font-size: 1.3rem; }
-        .sns-link .sns-arrow { margin-left: auto; color: var(--gold); font-size: 0.8rem; }
+        .sns-link-icon {
+            font-size: 1.8rem;
+            position: relative;
+            z-index: 1;
+            line-height: 1;
+        }
+
+        .sns-link-name {
+            font-family: 'Noto Serif JP', serif;
+            font-size: 0.92rem;
+            letter-spacing: 0.12em;
+            font-weight: 600;
+            position: relative;
+            z-index: 1;
+            color: #fff;
+        }
+
+        .sns-link.sns-uber .sns-link-name { color: #06C167; }
+        .sns-link.sns-shop .sns-link-name { color: var(--gold-light); }
+
+        .sns-link-sub {
+            font-size: 0.7rem;
+            letter-spacing: 0.06em;
+            position: relative;
+            z-index: 1;
+            opacity: 0.7;
+            color: #fff;
+            line-height: 1.5;
+        }
+
+        .sns-link.sns-uber .sns-link-sub { color: #c8e8d8; }
+        .sns-link.sns-shop .sns-link-sub { color: #c8b888; }
 
         /* ============================================================
            図鑑バナー
@@ -1198,8 +1301,7 @@
             .hero-catch { font-size: 3.6rem; }
             .concept-imgs { grid-template-rows: 240px 240px; }
             .access-photo { height: 380px; }
-            .sns-links { flex-direction: row; justify-content: center; }
-            .sns-link { min-width: 220px; }
+            .menu-simple-row .menu-thumb { height: 200px; }
         }
 
         @media (min-width: 1100px) {
@@ -1269,7 +1371,7 @@
 
     <!-- ===== HERO ===== -->
     <section class="hero">
-        <img src="ramen.jpg" alt="" class="hero-bg-photo">
+        <img src="tokushoyu.png" alt="" class="hero-bg-photo">
         <div class="hero-mask"></div>
         <div class="hero-mask-bottom"></div>
 
@@ -1326,9 +1428,9 @@
                 <span class="lang-en">From Rakuhoku, Kyoto, we pursue the "aesthetics of subtraction" — ramen made only from chicken, water, and unpasteurized soy sauce. No MSG, just the pure power of each ingredient.</span>
             </p>
             <div class="concept-imgs fade-in">
-                <img src="ramen.jpg" alt="らぁ麺" class="img-main">
-                <img src="ramen_square.jpg" alt="素材">
-                <img src="ramen_wide.jpg" alt="製麺">
+                <img src="tokushoyu.png" alt="らぁ麺" class="img-main">
+                <img src="taisho.jpg" alt="素材">
+                <img src="seimen.jpg" alt="製麺">
             </div>
             <a href="#menu" class="concept-more fade-in">
                 <span class="lang-ja">詳しく見る　→</span>
@@ -1386,9 +1488,9 @@
                 <span class="gold-line"></span>
             </div>
 
-            <!-- 簡易表示：特製4品（価格なし） -->
-            <ul class="menu-list fade-in">
-                <li class="menu-list-item">
+            <!-- 簡易表示：特製4品（2列×2行・価格なし） -->
+            <div class="menu-simple-grid fade-in">
+                <div class="menu-list-item">
                     <div class="menu-simple-row">
                         <img src="tokushoyu.png" alt="特製 鶏醤油らぁ麺" class="menu-thumb">
                         <div class="menu-info">
@@ -1396,35 +1498,35 @@
                             <p class="menu-desc"><span class="lang-ja">炙り豚バラチャーシュー、ワンタン、味玉を添えた至高の一杯。</span><span class="lang-en">Roasted pork, wontons & marinated egg.</span></p>
                         </div>
                     </div>
-                </li>
-                <li class="menu-list-item">
+                </div>
+                <div class="menu-list-item">
                     <div class="menu-simple-row">
-                        <img src="tokushoyu.png" alt="特製 鶏醤油つけそば" class="menu-thumb">
+                        <img src="tokutsuke.png" alt="特製 鶏醤油つけそば" class="menu-thumb">
                         <div class="menu-info">
                             <p class="menu-name"><span class="lang-ja">特製 鶏醤油つけそば</span><span class="lang-en">Special Dipping Noodles</span></p>
                             <p class="menu-desc"><span class="lang-ja">昆布水に浸した細麺を熱々の地鶏スープにくぐらせて。</span><span class="lang-en">Kelp water noodles with hot chicken soup.</span></p>
                         </div>
                     </div>
-                </li>
-                <li class="menu-list-item">
+                </div>
+                <div class="menu-list-item">
                     <div class="menu-simple-row">
-                        <img src="tokushoyu.png" alt="特製 煮干らぁ麺" class="menu-thumb">
+                        <img src="tokuniboshi.png" alt="特製 煮干らぁ麺" class="menu-thumb">
                         <div class="menu-info">
                             <p class="menu-name"><span class="lang-ja">特製 煮干らぁ麺</span><span class="lang-en">Special Sardine Ramen</span></p>
                             <p class="menu-desc"><span class="lang-ja">数種の煮干しをブレンドした100%魚介スープに豪華トッピング。</span><span class="lang-en">100% seafood soup with deluxe toppings.</span></p>
                         </div>
                     </div>
-                </li>
-                <li class="menu-list-item">
+                </div>
+                <div class="menu-list-item">
                     <div class="menu-simple-row">
-                        <img src="tokushoyu.png" alt="特製 鶏白湯らぁ麺" class="menu-thumb">
+                        <img src="tokupaitan.png" alt="特製 鶏白湯らぁ麺" class="menu-thumb">
                         <div class="menu-info">
                             <p class="menu-name"><span class="lang-ja">特製 鶏白湯らぁ麺<small class="menu-note lang-ja">（夏季販売停止）</small></span><span class="lang-en">Special Chicken Paitan<small class="menu-note"> (Summer: unavailable)</small></span></p>
                             <p class="menu-desc"><span class="lang-ja">濃厚クリーミーな鶏白湯に特製トッピングを追加。</span><span class="lang-en">Rich, creamy Chicken Paitan with special toppings.</span></p>
                         </div>
                     </div>
-                </li>
-            </ul>
+                </div>
+            </div>
 
             <!-- 詳しく見るボタン -->
             <button class="menu-more-btn fade-in" id="menuToggleBtn">
@@ -1520,7 +1622,7 @@
             </div>
             <div class="owner-grid">
                 <div class="fade-in">
-                    <img src="ramen_wide.jpg" alt="店主 袖岡哲也" class="owner-img">
+                    <img src="taisho.jpg" alt="店主 袖岡哲也" class="owner-img">
                 </div>
                 <div class="owner-text-col fade-in">
                     <p class="owner-name"><span class="lang-ja">袖岡 哲也</span><span class="lang-en">Tetsuya Sodeoka</span></p>
@@ -1566,7 +1668,7 @@
                 <span class="gold-line"></span>
             </div>
         </div>
-        <img src="ramen.jpg" alt="店舗外観" class="access-photo fade-in">
+        <img src="gaiso.jpg" alt="店舗外観" class="access-photo fade-in">
         <div class="sec-inner">
             <p class="access-lead fade-in">
                 <span class="lang-ja">落ち着いた京都の空間で、<br>心を込めた一杯をお楽しみください。</span>
@@ -1619,25 +1721,37 @@
     <section id="sns" class="sns-sec">
         <div class="sns-inner">
             <div class="sec-head fade-in">
-                <h2 class="sec-title" style="color:#f0e8d8;"><span class="lang-ja">お知らせ</span><span class="lang-en">Info</span></h2>
-                <p class="sec-en">SNS & DELIVERY</p>
+                <h2 class="sec-title" style="color:#f0e8d8;"><span class="lang-ja">お知らせ・各種リンク</span><span class="lang-en">Info & Links</span></h2>
+                <p class="sec-en">INFORMATION</p>
                 <span class="gold-line"></span>
             </div>
             <div class="sns-links fade-in">
-                <a href="https://www.instagram.com/touhichi_/?hl=ja" target="_blank" rel="noopener" class="sns-link">
-                    <span class="sns-icon">📷</span>
-                    <span><span class="lang-ja">公式Instagram</span><span class="lang-en">Instagram</span></span>
-                    <span class="sns-arrow">→</span>
+                <a href="https://www.instagram.com/touhichi_/?hl=ja" target="_blank" rel="noopener" class="sns-link sns-insta">
+                    <span class="sns-link-icon">
+                        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="color:#fff;position:relative;z-index:1;">
+                            <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/>
+                        </svg>
+                    </span>
+                    <span class="sns-link-name">Instagram</span>
+                    <span class="sns-link-sub"><span class="lang-ja">最新の限定メニュー・営業情報</span><span class="lang-en">Latest menus & hours</span></span>
                 </a>
-                <a href="https://www.ubereats.com/" target="_blank" rel="noopener" class="sns-link" style="border-color:rgba(6,193,103,0.25);color:#06C167;">
-                    <span class="sns-icon">🚲</span>
-                    <span>Uber Eats</span>
-                    <span class="sns-arrow" style="color:#06C167;">→</span>
+                <a href="https://www.ubereats.com/" target="_blank" rel="noopener" class="sns-link sns-uber">
+                    <span class="sns-link-icon" style="color:#06C167;position:relative;z-index:1;">
+                        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/>
+                        </svg>
+                    </span>
+                    <span class="sns-link-name">Uber Eats</span>
+                    <span class="sns-link-sub"><span class="lang-ja">デリバリーはこちらから</span><span class="lang-en">Order delivery</span></span>
                 </a>
-                <a href="https://tousugu2020.thebase.in/" target="_blank" rel="noopener" class="sns-link">
-                    <span class="sns-icon">🛍</span>
-                    <span><span class="lang-ja">オンラインショップ</span><span class="lang-en">Online Shop</span></span>
-                    <span class="sns-arrow">→</span>
+                <a href="https://tousugu2020.thebase.in/" target="_blank" rel="noopener" class="sns-link sns-shop">
+                    <span class="sns-link-icon" style="color:var(--gold-light);position:relative;z-index:1;">
+                        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/>
+                        </svg>
+                    </span>
+                    <span class="sns-link-name"><span class="lang-ja">オンラインショップ</span><span class="lang-en">Online Shop</span></span>
+                    <span class="sns-link-sub"><span class="lang-ja">お取り寄せラーメン販売中</span><span class="lang-en">Order ramen online</span></span>
                 </a>
             </div>
         </div>
