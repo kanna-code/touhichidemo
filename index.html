@@ -668,6 +668,105 @@
 
         .menu-more-btn:hover { background: var(--gold-light); }
 
+        /* 簡易表示行（価格なし） */
+        .menu-simple-row {
+            display: grid;
+            grid-template-columns: 88px 1fr;
+            align-items: center;
+            gap: 16px;
+            padding: 16px 4px;
+        }
+
+        /* 夏季停止・夜限定などのタグ */
+        .menu-note {
+            font-size: 0.72rem;
+            color: var(--text-light);
+            font-weight: 400;
+            margin-left: 6px;
+            letter-spacing: 0.02em;
+        }
+
+        .menu-tag {
+            display: inline-block;
+            font-size: 0.68rem;
+            color: var(--text-light);
+            border: 1px solid rgba(90,80,69,0.3);
+            padding: 1px 6px;
+            border-radius: 2px;
+            margin-left: 6px;
+            letter-spacing: 0.04em;
+            vertical-align: middle;
+        }
+
+        /* カテゴリ見出し */
+        .menu-category-head {
+            font-family: 'Noto Serif JP', serif;
+            font-size: 0.72rem;
+            letter-spacing: 0.35em;
+            color: var(--gold);
+            text-transform: uppercase;
+            padding: 28px 4px 10px;
+            border-bottom: 1px solid rgba(200,168,75,0.2);
+            margin-bottom: 0;
+        }
+
+        /* 全メニューリスト行 */
+        .menu-full-list { border-top: none; }
+
+        .menu-full-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 14px 4px;
+            gap: 12px;
+        }
+
+        .menu-full-name {
+            font-family: 'Noto Serif JP', serif;
+            font-size: 0.92rem;
+            color: var(--text-dark);
+            letter-spacing: 0.04em;
+            line-height: 1.5;
+        }
+
+        .menu-full-price {
+            font-family: 'Noto Serif JP', serif;
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+
+        /* 閉じるボタン */
+        .menu-close-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            margin-top: 0;
+            background: transparent;
+            border: 1px solid rgba(90,80,69,0.3);
+            color: var(--text-mid);
+            padding: 16px;
+            font-family: 'Noto Serif JP', serif;
+            font-size: 0.88rem;
+            letter-spacing: 0.2em;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .menu-close-btn:hover {
+            background: rgba(90,80,69,0.08);
+            color: var(--text-dark);
+        }
+
+        /* 全メニュー展開アニメーション */
+        #menuFull {
+            overflow: hidden;
+            transition: none;
+        }
+
         /* ============================================================
            OWNER
         ============================================================ */
@@ -1170,7 +1269,7 @@
 
     <!-- ===== HERO ===== -->
     <section class="hero">
-        <img src="shoyu.png" alt="" class="hero-bg-photo">
+        <img src="ramen.jpg" alt="" class="hero-bg-photo">
         <div class="hero-mask"></div>
         <div class="hero-mask-bottom"></div>
 
@@ -1227,9 +1326,9 @@
                 <span class="lang-en">From Rakuhoku, Kyoto, we pursue the "aesthetics of subtraction" — ramen made only from chicken, water, and unpasteurized soy sauce. No MSG, just the pure power of each ingredient.</span>
             </p>
             <div class="concept-imgs fade-in">
-                <img src="shoyu.png" alt="らぁ麺" class="img-main">
-                <img src="tokushoyu.png" alt="素材">
-                <img src="seimen.jpg" alt="製麺">
+                <img src="ramen.jpg" alt="らぁ麺" class="img-main">
+                <img src="ramen_square.jpg" alt="素材">
+                <img src="ramen_wide.jpg" alt="製麺">
             </div>
             <a href="#menu" class="concept-more fade-in">
                 <span class="lang-ja">詳しく見る　→</span>
@@ -1287,85 +1386,127 @@
                 <span class="gold-line"></span>
             </div>
 
+            <!-- 簡易表示：特製4品（価格なし） -->
             <ul class="menu-list fade-in">
                 <li class="menu-list-item">
-                    <a href="#">
+                    <div class="menu-simple-row">
                         <img src="tokushoyu.png" alt="特製 鶏醤油らぁ麺" class="menu-thumb">
                         <div class="menu-info">
                             <p class="menu-name"><span class="lang-ja">特製 鶏醤油らぁ麺</span><span class="lang-en">Special Chicken Soy Sauce</span></p>
                             <p class="menu-desc"><span class="lang-ja">炙り豚バラチャーシュー、ワンタン、味玉を添えた至高の一杯。</span><span class="lang-en">Roasted pork, wontons & marinated egg.</span></p>
                         </div>
-                        <div class="menu-price-wrap">
-                            <p class="menu-price">¥1,600</p>
-                        </div>
-                    </a>
+                    </div>
                 </li>
                 <li class="menu-list-item">
-                    <a href="#">
-                        <img src="tokushoyu.png" alt="鶏醤油らぁ麺" class="menu-thumb">
-                        <div class="menu-info">
-                            <p class="menu-name"><span class="lang-ja">鶏醤油らぁ麺</span><span class="lang-en">Chicken Soy Sauce Ramen</span></p>
-                            <p class="menu-desc"><span class="lang-ja">地鶏の旨味をダイレクトに感じる、とうひちの原点。</span><span class="lang-en">The origin of Tohichi's craft.</span></p>
-                        </div>
-                        <div class="menu-price-wrap">
-                            <p class="menu-price">¥1,200<br><small>Small ¥1,000</small></p>
-                        </div>
-                    </a>
-                </li>
-                <li class="menu-list-item">
-                    <a href="#">
+                    <div class="menu-simple-row">
                         <img src="tokushoyu.png" alt="特製 鶏醤油つけそば" class="menu-thumb">
                         <div class="menu-info">
                             <p class="menu-name"><span class="lang-ja">特製 鶏醤油つけそば</span><span class="lang-en">Special Dipping Noodles</span></p>
                             <p class="menu-desc"><span class="lang-ja">昆布水に浸した細麺を熱々の地鶏スープにくぐらせて。</span><span class="lang-en">Kelp water noodles with hot chicken soup.</span></p>
                         </div>
-                        <div class="menu-price-wrap">
-                            <p class="menu-price">¥1,900</p>
-                        </div>
-                    </a>
+                    </div>
                 </li>
                 <li class="menu-list-item">
-                    <a href="#">
-                        <img src="tokushoyu.png" alt="煮干らぁ麺" class="menu-thumb">
+                    <div class="menu-simple-row">
+                        <img src="tokushoyu.png" alt="特製 煮干らぁ麺" class="menu-thumb">
                         <div class="menu-info">
-                            <p class="menu-name"><span class="lang-ja">煮干らぁ麺</span><span class="lang-en">Sardine (Niboshi) Ramen</span></p>
-                            <p class="menu-desc"><span class="lang-ja">片口イワシ、鯵など数種の煮干しで引いた旨味たっぷりのスープ。</span><span class="lang-en">Umami-rich soup from sardines & mackerel.</span></p>
+                            <p class="menu-name"><span class="lang-ja">特製 煮干らぁ麺</span><span class="lang-en">Special Sardine Ramen</span></p>
+                            <p class="menu-desc"><span class="lang-ja">数種の煮干しをブレンドした100%魚介スープに豪華トッピング。</span><span class="lang-en">100% seafood soup with deluxe toppings.</span></p>
                         </div>
-                        <div class="menu-price-wrap">
-                            <p class="menu-price">¥1,200</p>
-                        </div>
-                    </a>
+                    </div>
                 </li>
                 <li class="menu-list-item">
-                    <a href="#">
-                        <img src="tokushoyu.png" alt="鶏白湯らぁ麺" class="menu-thumb">
+                    <div class="menu-simple-row">
+                        <img src="tokushoyu.png" alt="特製 鶏白湯らぁ麺" class="menu-thumb">
                         <div class="menu-info">
-                            <p class="menu-name"><span class="lang-ja">鶏白湯らぁ麺</span><span class="lang-en">Chicken Paitan Ramen</span></p>
-                            <p class="menu-desc"><span class="lang-ja">地鶏と国産鶏を高温で炊き上げたクリーミーなスープ。</span><span class="lang-en">Creamy white soup simmered at high heat.</span></p>
+                            <p class="menu-name"><span class="lang-ja">特製 鶏白湯らぁ麺<small class="menu-note lang-ja">（夏季販売停止）</small></span><span class="lang-en">Special Chicken Paitan<small class="menu-note"> (Summer: unavailable)</small></span></p>
+                            <p class="menu-desc"><span class="lang-ja">濃厚クリーミーな鶏白湯に特製トッピングを追加。</span><span class="lang-en">Rich, creamy Chicken Paitan with special toppings.</span></p>
                         </div>
-                        <div class="menu-price-wrap">
-                            <p class="menu-price">¥1,200</p>
-                        </div>
-                    </a>
-                </li>
-                <li class="menu-list-item">
-                    <a href="#">
-                        <img src="tokushoyu.png" alt="鶏油まぜそば" class="menu-thumb">
-                        <div class="menu-info">
-                            <p class="menu-name"><span class="lang-ja">鶏油まぜそば</span><span class="lang-en">Chicken Oil Maze-Soba</span></p>
-                            <p class="menu-desc"><span class="lang-ja">地鶏の鶏油と生揚げ醤油のみを茹でたての麺に絡めて。</span><span class="lang-en">Noodles coated in chicken oil & soy sauce.</span></p>
-                        </div>
-                        <div class="menu-price-wrap">
-                            <p class="menu-price">¥1,000</p>
-                        </div>
-                    </a>
+                    </div>
                 </li>
             </ul>
 
-            <a href="#" class="menu-more-btn fade-in">
-                <span class="lang-ja">お品書きを見る　→</span>
-                <span class="lang-en">Full Menu　→</span>
-            </a>
+            <!-- 詳しく見るボタン -->
+            <button class="menu-more-btn fade-in" id="menuToggleBtn">
+                <span class="lang-ja" id="menuToggleLabel">お品書きを見る　↓</span>
+                <span class="lang-en" id="menuToggleLabelEn">Full Menu　↓</span>
+            </button>
+
+            <!-- 全メニュー（初期非表示） -->
+            <div id="menuFull" style="display:none; margin-top: 0;">
+
+                <!-- らぁ麺 -->
+                <div class="menu-category-head">
+                    <span class="lang-ja">らぁ麺・つけそば・まぜそば</span>
+                    <span class="lang-en">Ramen / Tsukesoba / Mazesoba</span>
+                </div>
+                <ul class="menu-list menu-full-list">
+                    <li class="menu-list-item"><div class="menu-full-row"><span class="menu-full-name"><span class="lang-ja">特製 鶏醤油らぁ麺</span><span class="lang-en">Special Chicken Soy Sauce</span></span><span class="menu-full-price">¥1,700</span></div></li>
+                    <li class="menu-list-item"><div class="menu-full-row"><span class="menu-full-name"><span class="lang-ja">鶏醤油らぁ麺</span><span class="lang-en">Chicken Soy Sauce Ramen</span></span><span class="menu-full-price">¥1,300</span></div></li>
+                    <li class="menu-list-item"><div class="menu-full-row"><span class="menu-full-name"><span class="lang-ja">特製 鶏醤油つけそば</span><span class="lang-en">Special Dipping Noodles</span></span><span class="menu-full-price">¥2,200</span></div></li>
+                    <li class="menu-list-item"><div class="menu-full-row"><span class="menu-full-name"><span class="lang-ja">鶏醤油つけそば</span><span class="lang-en">Chicken Dipping Noodles</span></span><span class="menu-full-price">¥1,700</span></div></li>
+                    <li class="menu-list-item"><div class="menu-full-row"><span class="menu-full-name"><span class="lang-ja">特製 煮干らぁ麺</span><span class="lang-en">Special Sardine Ramen</span></span><span class="menu-full-price">¥1,700</span></div></li>
+                    <li class="menu-list-item"><div class="menu-full-row"><span class="menu-full-name"><span class="lang-ja">煮干らぁ麺</span><span class="lang-en">Sardine Ramen</span></span><span class="menu-full-price">¥1,300</span></div></li>
+                    <li class="menu-list-item"><div class="menu-full-row"><span class="menu-full-name"><span class="lang-ja">特製 鶏白湯らぁ麺 <span class="menu-tag lang-ja">夏季販売停止</span></span><span class="lang-en">Special Chicken Paitan <span class="menu-tag">Summer: unavailable</span></span></span><span class="menu-full-price">¥1,700</span></div></li>
+                    <li class="menu-list-item"><div class="menu-full-row"><span class="menu-full-name"><span class="lang-ja">鶏白湯らぁ麺 <span class="menu-tag lang-ja">夏季販売停止</span></span><span class="lang-en">Chicken Paitan <span class="menu-tag">Summer: unavailable</span></span></span><span class="menu-full-price">¥1,300</span></div></li>
+                    <li class="menu-list-item"><div class="menu-full-row"><span class="menu-full-name"><span class="lang-ja">鶏油まぜそば</span><span class="lang-en">Chicken Oil Maze-Soba</span></span><span class="menu-full-price">¥1,100</span></div></li>
+                    <li class="menu-list-item"><div class="menu-full-row"><span class="menu-full-name"><span class="lang-ja">豚まぜそば <span class="menu-tag lang-ja">夜限定</span></span><span class="lang-en">Pork Maze-Soba <span class="menu-tag">Night only</span></span></span><span class="menu-full-price">¥1,100</span></div></li>
+                    <li class="menu-list-item"><div class="menu-full-row"><span class="menu-full-name"><span class="lang-ja">鶏醤油らぁ麺（小）</span><span class="lang-en">Chicken Soy Sauce (Small)</span></span><span class="menu-full-price">¥1,000</span></div></li>
+                </ul>
+
+                <!-- トッピング -->
+                <div class="menu-category-head">
+                    <span class="lang-ja">トッピング</span>
+                    <span class="lang-en">Toppings</span>
+                </div>
+                <ul class="menu-list menu-full-list">
+                    <li class="menu-list-item"><div class="menu-full-row"><span class="menu-full-name"><span class="lang-ja">麺大盛り</span><span class="lang-en">Large Noodle</span></span><span class="menu-full-price">¥150</span></div></li>
+                    <li class="menu-list-item"><div class="menu-full-row"><span class="menu-full-name"><span class="lang-ja">味玉</span><span class="lang-en">Marinated Egg</span></span><span class="menu-full-price">¥150</span></div></li>
+                    <li class="menu-list-item"><div class="menu-full-row"><span class="menu-full-name"><span class="lang-ja">豚チャーシュー増し</span><span class="lang-en">Pork Char Siu Extra</span></span><span class="menu-full-price">¥400</span></div></li>
+                    <li class="menu-list-item"><div class="menu-full-row"><span class="menu-full-name"><span class="lang-ja">鶏チャーシュー増し</span><span class="lang-en">Chicken Char Siu Extra</span></span><span class="menu-full-price">¥300</span></div></li>
+                    <li class="menu-list-item"><div class="menu-full-row"><span class="menu-full-name"><span class="lang-ja">黒豚ワンタン</span><span class="lang-en">Black Pork Wonton</span></span><span class="menu-full-price">¥350</span></div></li>
+                    <li class="menu-list-item"><div class="menu-full-row"><span class="menu-full-name"><span class="lang-ja">メンマ増し</span><span class="lang-en">Bamboo Shoot Extra</span></span><span class="menu-full-price">¥200</span></div></li>
+                </ul>
+
+                <!-- サイドメニュー -->
+                <div class="menu-category-head">
+                    <span class="lang-ja">サイドメニュー</span>
+                    <span class="lang-en">Side Menu</span>
+                </div>
+                <ul class="menu-list menu-full-list">
+                    <li class="menu-list-item"><div class="menu-full-row"><span class="menu-full-name"><span class="lang-ja">炙り豚肉飯</span><span class="lang-en">Roasted Pork Rice</span></span><span class="menu-full-price">¥500</span></div></li>
+                    <li class="menu-list-item"><div class="menu-full-row"><span class="menu-full-name"><span class="lang-ja">鶏飯</span><span class="lang-en">Chicken Rice</span></span><span class="menu-full-price">¥500</span></div></li>
+                    <li class="menu-list-item"><div class="menu-full-row"><span class="menu-full-name"><span class="lang-ja">ご飯</span><span class="lang-en">Steamed Rice</span></span><span class="menu-full-price">¥200</span></div></li>
+                </ul>
+
+                <!-- ドリンク -->
+                <div class="menu-category-head">
+                    <span class="lang-ja">ドリンク</span>
+                    <span class="lang-en">Drinks</span>
+                </div>
+                <ul class="menu-list menu-full-list">
+                    <li class="menu-list-item"><div class="menu-full-row"><span class="menu-full-name"><span class="lang-ja">サッポロラガービール</span><span class="lang-en">Sapporo Lager Beer</span></span><span class="menu-full-price">¥700</span></div></li>
+                    <li class="menu-list-item"><div class="menu-full-row"><span class="menu-full-name"><span class="lang-ja">ハートランドビール</span><span class="lang-en">Heartland Beer</span></span><span class="menu-full-price">¥500</span></div></li>
+                    <li class="menu-list-item"><div class="menu-full-row"><span class="menu-full-name"><span class="lang-ja">ノンアルコールビール</span><span class="lang-en">Non-Alcoholic Beer</span></span><span class="menu-full-price">¥400</span></div></li>
+                    <li class="menu-list-item"><div class="menu-full-row"><span class="menu-full-name"><span class="lang-ja">コーラ</span><span class="lang-en">Cola</span></span><span class="menu-full-price">¥400</span></div></li>
+                </ul>
+
+                <!-- グッズ -->
+                <div class="menu-category-head">
+                    <span class="lang-ja">グッズ</span>
+                    <span class="lang-en">Goods</span>
+                </div>
+                <ul class="menu-list menu-full-list">
+                    <li class="menu-list-item"><div class="menu-full-row"><span class="menu-full-name"><span class="lang-ja">Tシャツ</span><span class="lang-en">T-Shirt</span></span><span class="menu-full-price">¥4,000</span></div></li>
+                </ul>
+
+                <!-- 閉じるボタン -->
+                <button class="menu-close-btn" id="menuCloseBtn">
+                    <span class="lang-ja">閉じる　↑</span>
+                    <span class="lang-en">Close　↑</span>
+                </button>
+            </div>
+
         </div>
     </section>
 
@@ -1425,7 +1566,7 @@
                 <span class="gold-line"></span>
             </div>
         </div>
-        <img src="shoyu.png" alt="店舗外観" class="access-photo fade-in">
+        <img src="ramen.jpg" alt="店舗外観" class="access-photo fade-in">
         <div class="sec-inner">
             <p class="access-lead fade-in">
                 <span class="lang-ja">落ち着いた京都の空間で、<br>心を込めた一杯をお楽しみください。</span>
@@ -1597,7 +1738,24 @@
         document.getElementById('langToggle').addEventListener('click', toggleLang);
         document.getElementById('mobileLangToggle').addEventListener('click', toggleLang);
 
-        // スクロールフェードイン
+        // メニュー展開トグル
+        const menuToggleBtn = document.getElementById('menuToggleBtn');
+        const menuFull      = document.getElementById('menuFull');
+        const menuCloseBtn  = document.getElementById('menuCloseBtn');
+
+        menuToggleBtn.addEventListener('click', () => {
+            menuFull.style.display = 'block';
+            menuToggleBtn.style.display = 'none';
+            // 展開後に全メニュー先頭へスクロール
+            menuFull.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
+
+        menuCloseBtn.addEventListener('click', () => {
+            menuFull.style.display = 'none';
+            menuToggleBtn.style.display = 'flex';
+            // 閉じたらお品書きセクション先頭へ戻る
+            document.getElementById('menu').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
         const observer = new IntersectionObserver(entries => {
             entries.forEach(e => {
                 if (e.isIntersecting) {
