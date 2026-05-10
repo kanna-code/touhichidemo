@@ -238,10 +238,17 @@
         ============================================================ */
         .hero {
             position: relative;
-            height: 100svh;
-            min-height: 600px;
+            height: 65svh;
+            min-height: 420px;
             background: var(--black);
             overflow: hidden;
+        }
+
+        @media (min-width: 768px) {
+            .hero {
+                height: 100svh;
+                min-height: 600px;
+            }
         }
 
         /* 背景ラーメン写真（全幅） */
