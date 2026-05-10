@@ -298,7 +298,7 @@
             z-index: 4;
             display: flex;
             flex-direction: column;
-            justify-content: center;
+            justify-content: flex-start;
             padding: 80px 0 80px 6%;
         }
 
@@ -593,7 +593,7 @@
 
         .menu-list-item a {
             display: grid;
-            grid-template-columns: 88px 1fr auto;
+            grid-template-columns: 108px 1fr auto;
             align-items: center;
             gap: 16px;
             padding: 16px 4px;
@@ -634,6 +634,10 @@
         .menu-price-wrap {
             text-align: right;
             flex-shrink: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 4px;
         }
 
         .menu-price {
@@ -650,23 +654,24 @@
         }
 
         .menu-more-btn {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 16px;
-            margin-top: 0;
-            background: var(--gold);
-            color: #0c0c0c;
-            padding: 18px;
-            text-decoration: none;
+            display: block;
+            margin: 40px auto 0;
+            background: transparent;
+            border: 1px solid rgba(200,168,75,0.45);
+            color: var(--gold);
+            padding: 14px 56px;
             font-family: 'Noto Serif JP', serif;
-            font-size: 0.9rem;
+            font-size: 0.88rem;
             letter-spacing: 0.2em;
-            font-weight: 600;
-            transition: background 0.3s;
+            font-weight: 400;
+            cursor: pointer;
+            transition: all 0.3s;
         }
 
-        .menu-more-btn:hover { background: var(--gold-light); }
+        .menu-more-btn:hover {
+            background: var(--gold);
+            color: #000;
+        }
 
         /* 簡易表示：2列×2行グリッド */
         .menu-simple-grid {
@@ -795,6 +800,47 @@
         #menuFull {
             overflow: hidden;
             transition: none;
+        }
+
+        /* メニュー写真グリッド */
+        .menu-photo-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4px;
+        }
+
+        .menu-photo-card {
+            position: relative;
+            overflow: hidden;
+            aspect-ratio: 3/2;
+        }
+
+        .menu-photo-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            filter: brightness(0.88);
+            transition: transform 0.5s ease, filter 0.5s ease;
+        }
+
+        .menu-photo-card:hover img {
+            transform: scale(1.04);
+            filter: brightness(1);
+        }
+
+        .menu-photo-name {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 36px 12px 12px;
+            background: linear-gradient(to top, rgba(0,0,0,0.75), transparent);
+            color: #f0e8d8;
+            font-family: 'Noto Serif JP', serif;
+            font-size: 0.82rem;
+            letter-spacing: 0.06em;
+            line-height: 1.4;
         }
 
         /* ============================================================
@@ -993,7 +1039,7 @@
         }
 
         /* ============================================================
-           SNS
+           SNS / INFO
         ============================================================ */
         .sns-sec {
             background: var(--black2);
@@ -1001,113 +1047,107 @@
         }
 
         .sns-inner {
-            max-width: 640px;
+            max-width: 680px;
             margin: 0 auto;
             padding: 0 24px;
             text-align: center;
         }
 
         .sns-links {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 16px;
             margin-top: 40px;
-        }
-
-        @media (min-width: 540px) {
-            .sns-links { grid-template-columns: 1fr 1fr; }
-            .sns-links .sns-link:last-child:nth-child(odd) {
-                grid-column: 1 / -1;
-                max-width: 50%;
-                margin: 0 auto;
-                width: 100%;
-            }
+            border-top: 1px solid rgba(200,168,75,0.15);
+            text-align: left;
         }
 
         .sns-link {
             display: flex;
-            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+            padding: 22px 4px;
+            text-decoration: none;
+            border-bottom: 1px solid rgba(200,168,75,0.15);
+            transition: background 0.3s;
+        }
+
+        .sns-link:hover { background: rgba(200,168,75,0.04); }
+
+        .sns-link-icon-wrap {
+            width: 44px;
+            height: 44px;
+            min-width: 44px;
+            display: flex;
             align-items: center;
             justify-content: center;
-            gap: 10px;
-            padding: 28px 20px;
-            text-decoration: none;
-            position: relative;
-            overflow: hidden;
-            transition: transform 0.3s ease;
-        }
-
-        .sns-link:hover { transform: translateY(-3px); }
-
-        /* Instagram */
-        .sns-link.sns-insta {
-            background: linear-gradient(135deg, #833ab4 0%, #c13584 40%, #e1306c 65%, #fd1d1d 100%);
-        }
-
-        .sns-link.sns-insta::after {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: rgba(0,0,0,0.15);
-            transition: opacity 0.3s;
-        }
-
-        .sns-link.sns-insta:hover::after { opacity: 0; }
-
-        /* Uber Eats */
-        .sns-link.sns-uber {
-            background: #142328;
-            border: 1px solid rgba(6,193,103,0.3);
-        }
-
-        .sns-link.sns-uber:hover {
-            background: #1a2e34;
-            border-color: rgba(6,193,103,0.6);
-        }
-
-        /* Online Shop */
-        .sns-link.sns-shop {
-            background: var(--black3);
             border: 1px solid rgba(200,168,75,0.2);
         }
 
-        .sns-link.sns-shop:hover {
-            border-color: rgba(200,168,75,0.5);
-            background: rgba(200,168,75,0.05);
-        }
-
-        .sns-link-icon {
-            font-size: 1.8rem;
-            position: relative;
-            z-index: 1;
-            line-height: 1;
-        }
+        .sns-link-body { flex: 1; }
 
         .sns-link-name {
             font-family: 'Noto Serif JP', serif;
-            font-size: 0.92rem;
-            letter-spacing: 0.12em;
+            font-size: 0.95rem;
             font-weight: 600;
-            position: relative;
-            z-index: 1;
-            color: #fff;
+            color: #f0e8d8;
+            letter-spacing: 0.06em;
+            display: block;
+            margin-bottom: 4px;
         }
 
         .sns-link.sns-uber .sns-link-name { color: #06C167; }
         .sns-link.sns-shop .sns-link-name { color: var(--gold-light); }
 
         .sns-link-sub {
-            font-size: 0.7rem;
-            letter-spacing: 0.06em;
-            position: relative;
-            z-index: 1;
-            opacity: 0.7;
-            color: #fff;
+            font-size: 0.78rem;
+            color: #6a6050;
+            letter-spacing: 0.04em;
             line-height: 1.5;
+            display: block;
         }
 
-        .sns-link.sns-uber .sns-link-sub { color: #c8e8d8; }
-        .sns-link.sns-shop .sns-link-sub { color: #c8b888; }
+        .sns-link-arrow {
+            color: var(--gold);
+            font-size: 0.8rem;
+            flex-shrink: 0;
+        }
+
+        /* 駐車場お知らせ */
+        .parking-notice {
+            display: flex;
+            align-items: flex-start;
+            gap: 14px;
+            padding: 16px 18px;
+            background: rgba(200,168,75,0.07);
+            border: 1px solid rgba(200,168,75,0.25);
+            border-left: 3px solid var(--gold);
+        }
+
+        .parking-notice-badge {
+            width: 34px;
+            height: 34px;
+            min-width: 34px;
+            background: var(--gold);
+            color: #000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Noto Serif JP', serif;
+            font-weight: 700;
+            font-size: 0.95rem;
+        }
+
+        .parking-notice-title {
+            font-family: 'Noto Serif JP', serif;
+            font-size: 0.85rem;
+            color: var(--gold-light);
+            letter-spacing: 0.05em;
+            margin-bottom: 5px;
+        }
+
+        .parking-notice-text {
+            font-size: 0.8rem;
+            color: #9a8e7e;
+            line-height: 1.75;
+        }
 
         /* ============================================================
            図鑑バナー
@@ -1427,15 +1467,15 @@
                 <span class="lang-ja">京都、洛北の地から、鶏と水、そして生揚げ醤油だけで創り上げる「引き算の美学」を追求したらぁ麺をお届けしています。化学調味料に頼らず、素材本来の力を極限まで引き出した一杯。屋号「とうひち」には、地域に根ざし世代を超えて愛される存在でありたいという願いが込められています。</span>
                 <span class="lang-en">From Rakuhoku, Kyoto, we pursue the "aesthetics of subtraction" — ramen made only from chicken, water, and unpasteurized soy sauce. No MSG, just the pure power of each ingredient.</span>
             </p>
+            <a href="#menu" class="concept-more fade-in">
+                <span class="lang-ja">詳しく見る　→</span>
+                <span class="lang-en">Learn more　→</span>
+            </a>
             <div class="concept-imgs fade-in">
                 <img src="tokushoyu.png" alt="らぁ麺" class="img-main">
                 <img src="taisho.jpg" alt="素材">
                 <img src="seimen.jpg" alt="製麺">
             </div>
-            <a href="#menu" class="concept-more fade-in">
-                <span class="lang-ja">詳しく見る　→</span>
-                <span class="lang-en">Learn more　→</span>
-            </a>
         </div>
     </section>
 
@@ -1488,42 +1528,34 @@
                 <span class="gold-line"></span>
             </div>
 
-            <!-- 簡易表示：特製4品（2列×2行・価格なし） -->
-            <div class="menu-simple-grid fade-in">
-                <div class="menu-list-item">
-                    <div class="menu-simple-row">
-                        <img src="tokushoyu.png" alt="特製 鶏醤油らぁ麺" class="menu-thumb">
-                        <div class="menu-info">
-                            <p class="menu-name"><span class="lang-ja">特製 鶏醤油らぁ麺</span><span class="lang-en">Special Chicken Soy Sauce</span></p>
-                            <p class="menu-desc"><span class="lang-ja">炙り豚バラチャーシュー、ワンタン、味玉を添えた至高の一杯。</span><span class="lang-en">Roasted pork, wontons & marinated egg.</span></p>
-                        </div>
+            <!-- 写真グリッド（初期表示） -->
+            <div class="menu-photo-grid fade-in">
+                <div class="menu-photo-card">
+                    <img src="tokushoyu.png" alt="特製 鶏醤油らぁ麺">
+                    <div class="menu-photo-name">
+                        <span class="lang-ja">特製 鶏醤油らぁ麺</span>
+                        <span class="lang-en">Special Chicken Soy Sauce</span>
                     </div>
                 </div>
-                <div class="menu-list-item">
-                    <div class="menu-simple-row">
-                        <img src="tokutsuke.png" alt="特製 鶏醤油つけそば" class="menu-thumb">
-                        <div class="menu-info">
-                            <p class="menu-name"><span class="lang-ja">特製 鶏醤油つけそば</span><span class="lang-en">Special Dipping Noodles</span></p>
-                            <p class="menu-desc"><span class="lang-ja">昆布水に浸した細麺を熱々の地鶏スープにくぐらせて。</span><span class="lang-en">Kelp water noodles with hot chicken soup.</span></p>
-                        </div>
+                <div class="menu-photo-card">
+                    <img src="tokutsuke.png" alt="特製 鶏醤油つけそば">
+                    <div class="menu-photo-name">
+                        <span class="lang-ja">特製 鶏醤油つけそば</span>
+                        <span class="lang-en">Special Dipping Noodles</span>
                     </div>
                 </div>
-                <div class="menu-list-item">
-                    <div class="menu-simple-row">
-                        <img src="tokuniboshi.png" alt="特製 煮干らぁ麺" class="menu-thumb">
-                        <div class="menu-info">
-                            <p class="menu-name"><span class="lang-ja">特製 煮干らぁ麺</span><span class="lang-en">Special Sardine Ramen</span></p>
-                            <p class="menu-desc"><span class="lang-ja">数種の煮干しをブレンドした100%魚介スープに豪華トッピング。</span><span class="lang-en">100% seafood soup with deluxe toppings.</span></p>
-                        </div>
+                <div class="menu-photo-card">
+                    <img src="tokuniboshi.png" alt="特製 煮干らぁ麺">
+                    <div class="menu-photo-name">
+                        <span class="lang-ja">特製 煮干らぁ麺</span>
+                        <span class="lang-en">Special Sardine Ramen</span>
                     </div>
                 </div>
-                <div class="menu-list-item">
-                    <div class="menu-simple-row">
-                        <img src="tokupaitan.png" alt="特製 鶏白湯らぁ麺" class="menu-thumb">
-                        <div class="menu-info">
-                            <p class="menu-name"><span class="lang-ja">特製 鶏白湯らぁ麺<small class="menu-note lang-ja">（夏季販売停止）</small></span><span class="lang-en">Special Chicken Paitan<small class="menu-note"> (Summer: unavailable)</small></span></p>
-                            <p class="menu-desc"><span class="lang-ja">濃厚クリーミーな鶏白湯に特製トッピングを追加。</span><span class="lang-en">Rich, creamy Chicken Paitan with special toppings.</span></p>
-                        </div>
+                <div class="menu-photo-card">
+                    <img src="tokupaitan.png" alt="特製 鶏白湯らぁ麺">
+                    <div class="menu-photo-name">
+                        <span class="lang-ja">特製 鶏白湯らぁ麺</span>
+                        <span class="lang-en">Special Chicken Paitan</span>
                     </div>
                 </div>
             </div>
@@ -1535,7 +1567,7 @@
             </button>
 
             <!-- 全メニュー（初期非表示） -->
-            <div id="menuFull" style="display:none; margin-top: 0;">
+            <div id="menuFull" style="display:none; margin-top: 32px;">
 
                 <!-- らぁ麺 -->
                 <div class="menu-category-head">
@@ -1708,9 +1740,16 @@
                         <p class="map-label"><span class="lang-ja">店舗の場所</span><span class="lang-en">Shop Location</span></p>
                         <iframe class="map-frame" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3266.268722291689!2d135.7914224!3d35.050020100000005!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x6001a8104d0f0f93%3A0xb4280792666e9b78!2sRamen%20Touhichi!5e0!3m2!1sen!2sjp!4v1770112644919!5m2!1sen!2sjp" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
                     </div>
+                    <div class="parking-notice">
+                        <div class="parking-notice-badge">P</div>
+                        <div>
+                            <p class="parking-notice-title"><span class="lang-ja">専用駐車場は店舗から離れた場所にあります</span><span class="lang-en">Parking lot is located away from the shop</span></p>
+                            <p class="parking-notice-text"><span class="lang-ja">当店の専用駐車場（3台）は、店舗から少し離れた場所にございます。下記マップをご確認の上、お間違えのないようご来店ください。</span><span class="lang-en">Our dedicated parking (3 spots) is a short walk from the shop. Please check the map below before visiting.</span></p>
+                        </div>
+                    </div>
                     <div>
-                        <p class="map-label"><span class="lang-ja">専用駐車場</span><span class="lang-en">Parking</span></p>
-                        <iframe class="map-frame" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3266.3113361853298!2d135.7917244!3d35.0489545!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x60010900610c131d%3A0x9b77618efa687244!2sRamentohichi%20Okyakusamasenyo%20Parking%20Lot!5e0!3m2!1sen!2sjp!4v1770173285135!5m2!1sen!2sjp" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                        <p class="map-label"><span class="lang-ja">専用駐車場（3台） — 店舗とは別の場所です</span><span class="lang-en">Parking Lot (3 spots) — separate from the shop</span></p>
+                        <iframe class="map-frame" style="height:240px;" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3266.3113361853298!2d135.7917244!3d35.0489545!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x60010900610c131d%3A0x9b77618efa687244!2sRamentohichi%20Okyakusamasenyo%20Parking%20Lot!5e0!3m2!1sen!2sjp!4v1770173285135!5m2!1sen!2sjp" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
                     </div>
                 </div>
             </div>
@@ -1727,31 +1766,40 @@
             </div>
             <div class="sns-links fade-in">
                 <a href="https://www.instagram.com/touhichi_/?hl=ja" target="_blank" rel="noopener" class="sns-link sns-insta">
-                    <span class="sns-link-icon">
-                        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="color:#fff;position:relative;z-index:1;">
+                    <span class="sns-link-icon-wrap">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#c13584" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
                             <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/>
                         </svg>
                     </span>
-                    <span class="sns-link-name">Instagram</span>
-                    <span class="sns-link-sub"><span class="lang-ja">最新の限定メニュー・営業情報</span><span class="lang-en">Latest menus & hours</span></span>
+                    <div class="sns-link-body">
+                        <span class="sns-link-name">Instagram</span>
+                        <span class="sns-link-sub"><span class="lang-ja">最新の限定メニュー・営業情報を随時更新中</span><span class="lang-en">Latest menus & hours updated regularly</span></span>
+                    </div>
+                    <span class="sns-link-arrow">→</span>
                 </a>
                 <a href="https://www.ubereats.com/" target="_blank" rel="noopener" class="sns-link sns-uber">
-                    <span class="sns-link-icon" style="color:#06C167;position:relative;z-index:1;">
-                        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <span class="sns-link-icon-wrap">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#06C167" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
                             <circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/>
                         </svg>
                     </span>
-                    <span class="sns-link-name">Uber Eats</span>
-                    <span class="sns-link-sub"><span class="lang-ja">デリバリーはこちらから</span><span class="lang-en">Order delivery</span></span>
+                    <div class="sns-link-body">
+                        <span class="sns-link-name">Uber Eats</span>
+                        <span class="sns-link-sub"><span class="lang-ja">デリバリーはこちらからご注文ください</span><span class="lang-en">Order delivery online</span></span>
+                    </div>
+                    <span class="sns-link-arrow">→</span>
                 </a>
                 <a href="https://tousugu2020.thebase.in/" target="_blank" rel="noopener" class="sns-link sns-shop">
-                    <span class="sns-link-icon" style="color:var(--gold-light);position:relative;z-index:1;">
-                        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <span class="sns-link-icon-wrap">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
                             <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/>
                         </svg>
                     </span>
-                    <span class="sns-link-name"><span class="lang-ja">オンラインショップ</span><span class="lang-en">Online Shop</span></span>
-                    <span class="sns-link-sub"><span class="lang-ja">お取り寄せラーメン販売中</span><span class="lang-en">Order ramen online</span></span>
+                    <div class="sns-link-body">
+                        <span class="sns-link-name"><span class="lang-ja">オンラインショップ</span><span class="lang-en">Online Shop</span></span>
+                        <span class="sns-link-sub"><span class="lang-ja">お取り寄せラーメンを公式ショップで販売中</span><span class="lang-en">Order our ramen online</span></span>
+                    </div>
+                    <span class="sns-link-arrow">→</span>
                 </a>
             </div>
         </div>
@@ -1866,7 +1914,7 @@
 
         menuCloseBtn.addEventListener('click', () => {
             menuFull.style.display = 'none';
-            menuToggleBtn.style.display = 'flex';
+            menuToggleBtn.style.display = 'block';
             // 閉じたらお品書きセクション先頭へ戻る
             document.getElementById('menu').scrollIntoView({ behavior: 'smooth', block: 'start' });
         });
