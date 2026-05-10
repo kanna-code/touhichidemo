@@ -244,27 +244,28 @@
             overflow: hidden;
         }
 
-        /* 背景ラーメン写真（右側） */
+        /* 背景ラーメン写真（全幅） */
         .hero-bg-photo {
             position: absolute;
             top: 0;
             right: 0;
-            width: 72%;
+            width: 100%;
             height: 100%;
             object-fit: cover;
             object-position: center center;
-            opacity: 0.85;
+            opacity: 1;
         }
 
-        /* 左から右へのグラデーションマスク */
+        /* 左端だけ薄くマスク（テキスト可読性確保） */
         .hero-mask {
             position: absolute;
             inset: 0;
             background: linear-gradient(
                 to right,
-                var(--black) 28%,
-                rgba(12,12,12,0.7) 55%,
-                rgba(12,12,12,0.2) 100%
+                rgba(12,12,12,0.78) 0%,
+                rgba(12,12,12,0.35) 30%,
+                rgba(12,12,12,0.05) 60%,
+                rgba(12,12,12,0) 100%
             );
             z-index: 1;
         }
@@ -298,8 +299,8 @@
             z-index: 4;
             display: flex;
             flex-direction: column;
-            justify-content: flex-start;
-            padding: 80px 0 80px 6%;
+            justify-content: flex-end;
+            padding: 80px 6% 80px;
         }
 
         /* 縦書きキャッチコピー */
@@ -856,6 +857,110 @@
             padding: 48px 16px 14px;
         }
 
+        .menu-photo-card { cursor: pointer; }
+
+        /* メニューモーダル */
+        .menu-modal-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 1000;
+            background: rgba(0,0,0,0.88);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .menu-modal-overlay.open {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .menu-modal {
+            background: var(--black2);
+            border: 1px solid rgba(200,168,75,0.3);
+            max-width: 420px;
+            width: 100%;
+            position: relative;
+            transform: translateY(24px);
+            transition: transform 0.35s ease;
+        }
+
+        .menu-modal-overlay.open .menu-modal {
+            transform: translateY(0);
+        }
+
+        .menu-modal-close {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(0,0,0,0.55);
+            border: none;
+            color: #f0e8d8;
+            font-size: 1rem;
+            width: 30px;
+            height: 30px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1;
+            transition: background 0.3s;
+            font-family: sans-serif;
+        }
+
+        .menu-modal-close:hover { background: rgba(200,168,75,0.4); }
+
+        .menu-modal-img {
+            width: 100%;
+            aspect-ratio: 4/3;
+            object-fit: cover;
+            display: block;
+        }
+
+        .menu-modal-body {
+            padding: 20px 24px 28px;
+            border-top: 1px solid rgba(200,168,75,0.15);
+        }
+
+        .menu-modal-name {
+            font-family: 'Noto Serif JP', serif;
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: #f0e8d8;
+            letter-spacing: 0.06em;
+            margin-bottom: 12px;
+        }
+
+        .menu-modal-desc {
+            font-size: 0.86rem;
+            color: #9a8e7e;
+            line-height: 1.9;
+            margin-bottom: 18px;
+        }
+
+        .menu-modal-price {
+            font-family: 'Noto Serif JP', serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--gold);
+            letter-spacing: 0.04em;
+        }
+
+        .menu-modal-tag {
+            font-size: 0.72rem;
+            color: var(--text-light);
+            border: 1px solid rgba(90,80,69,0.4);
+            padding: 2px 8px;
+            margin-left: 10px;
+            vertical-align: middle;
+            font-family: 'Noto Sans JP', sans-serif;
+            font-weight: 400;
+        }
+
         /* ============================================================
            OWNER
         ============================================================ */
@@ -1349,9 +1454,8 @@
            PCレイアウト調整
         ============================================================ */
         @media (min-width: 768px) {
-            .hero-bg-photo { width: 58%; }
-            .hero-content { padding: 80px 0 80px 8%; }
-            .hero-catch { font-size: 3.6rem; }
+            .hero-bg-photo { width: 100%; }
+            .hero-content { padding: 80px 8% 80px; }
             .concept-imgs { grid-template-rows: 240px 240px; }
             .access-photo { height: 380px; }
             .menu-simple-row .menu-thumb { height: 200px; }
@@ -1359,7 +1463,6 @@
 
         @media (min-width: 1100px) {
             .sec-inner { padding: 0 40px; }
-            .hero-catch { font-size: 4.5rem; }
         }
 
         /* ============================================================
@@ -1444,10 +1547,6 @@
         </svg>
 
         <div class="hero-content">
-            <p class="hero-catch">
-                <span class="lang-ja">一杯に、<em>真心</em>を。</span>
-                <span class="lang-en" style="writing-mode:horizontal-tb;font-size:clamp(1.8rem,4vw,3rem);letter-spacing:0.05em;">A Bowl of<br><em>Sincerity.</em></span>
-            </p>
             <p class="hero-sub">
                 <span class="lang-ja">素材の旨を極めた、<br>淡麗スープのらぁ麺をどうぞ。</span>
                 <span class="lang-en">Refined ramen with a light,<br>clear broth from Kyoto.</span>
@@ -1543,28 +1642,54 @@
 
             <!-- 写真グリッド（初期表示） -->
             <div class="menu-photo-grid fade-in">
-                <div class="menu-photo-card">
+                <div class="menu-photo-card"
+                     data-src="tokushoyu.png"
+                     data-name-ja="特製 鶏醤油らぁ麺"
+                     data-name-en="Special Chicken Soy Sauce Ramen"
+                     data-desc-ja="炙り豚バラチャーシュー、ワンタン、味玉を添えた至高の一杯。鶏の旨みを引き出した淡麗スープが、特製トッピングと見事に調和します。"
+                     data-desc-en="Our signature bowl topped with roasted pork belly chashu, wontons, and a marinated egg. The delicate chicken broth harmonizes beautifully with each premium topping."
+                     data-price="¥1,700">
                     <img src="tokushoyu.png" alt="特製 鶏醤油らぁ麺">
                     <div class="menu-photo-name">
                         <span class="lang-ja">特製 鶏醤油らぁ麺</span>
                         <span class="lang-en">Special Chicken Soy Sauce</span>
                     </div>
                 </div>
-                <div class="menu-photo-card">
+                <div class="menu-photo-card"
+                     data-src="tokutsuke.png"
+                     data-name-ja="特製 鶏醤油つけそば"
+                     data-name-en="Special Chicken Dipping Noodles"
+                     data-desc-ja="昆布水に浸した細麺を、熱々の地鶏スープにくぐらせてお召し上がりください。炙り豚バラ、ワンタン、味玉入りの贅沢な一品です。"
+                     data-desc-en="Thin noodles soaked in kelp water, served with hot free-range chicken dipping broth. Includes roasted pork belly, wontons, and a marinated egg."
+                     data-price="¥2,200">
                     <img src="tokutsuke.png" alt="特製 鶏醤油つけそば">
                     <div class="menu-photo-name">
                         <span class="lang-ja">特製 鶏醤油つけそば</span>
                         <span class="lang-en">Special Dipping Noodles</span>
                     </div>
                 </div>
-                <div class="menu-photo-card">
+                <div class="menu-photo-card"
+                     data-src="tokuniboshi.png"
+                     data-name-ja="特製 煮干らぁ麺"
+                     data-name-en="Special Sardine Ramen"
+                     data-desc-ja="数種の煮干しをブレンドした100%魚介スープに、豪華な特製トッピングを添えました。豊かな旨みとキレのある後味が特徴です。"
+                     data-desc-en="100% seafood broth made from a blend of dried sardines, topped with premium ingredients. Rich umami with a clean, lingering finish."
+                     data-price="¥1,700">
                     <img src="tokuniboshi.png" alt="特製 煮干らぁ麺">
                     <div class="menu-photo-name">
                         <span class="lang-ja">特製 煮干らぁ麺</span>
                         <span class="lang-en">Special Sardine Ramen</span>
                     </div>
                 </div>
-                <div class="menu-photo-card">
+                <div class="menu-photo-card"
+                     data-src="tokupaitan.png"
+                     data-name-ja="特製 鶏白湯らぁ麺"
+                     data-name-en="Special Chicken Paitan"
+                     data-desc-ja="濃厚でクリーミーな鶏白湯スープに、特製トッピングを豪華にのせた一杯。とろりとしたスープが麺によく絡みます。"
+                     data-desc-en="Rich and creamy chicken paitan broth served with premium toppings. The thick, velvety soup clings perfectly to every strand of noodle."
+                     data-price="¥1,700"
+                     data-tag-ja="夏季販売停止"
+                     data-tag-en="Summer: unavailable">
                     <img src="tokupaitan.png" alt="特製 鶏白湯らぁ麺">
                     <div class="menu-photo-name">
                         <span class="lang-ja">特製 鶏白湯らぁ麺</span>
@@ -1876,6 +2001,19 @@
         </div>
     </footer>
 
+    <!-- ===== メニューモーダル ===== -->
+    <div class="menu-modal-overlay" id="menuModal">
+        <div class="menu-modal">
+            <button class="menu-modal-close" id="menuModalClose">✕</button>
+            <img class="menu-modal-img" id="menuModalImg" src="" alt="">
+            <div class="menu-modal-body">
+                <p class="menu-modal-name" id="menuModalName"></p>
+                <p class="menu-modal-desc" id="menuModalDesc"></p>
+                <p class="menu-modal-price" id="menuModalPrice"></p>
+            </div>
+        </div>
+    </div>
+
     <script>
         // ヘッダースクロール
         const header = document.getElementById('header');
@@ -1941,6 +2079,51 @@
         }, { threshold: 0.12 });
 
         document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+        // メニューモーダル
+        const menuModal      = document.getElementById('menuModal');
+        const menuModalClose = document.getElementById('menuModalClose');
+        const menuModalImg   = document.getElementById('menuModalImg');
+        const menuModalName  = document.getElementById('menuModalName');
+        const menuModalDesc  = document.getElementById('menuModalDesc');
+        const menuModalPrice = document.getElementById('menuModalPrice');
+
+        function openMenuModal(card) {
+            const isEn = document.body.classList.contains('english-mode');
+            const name  = isEn ? card.dataset.nameEn  : card.dataset.nameJa;
+            const desc  = isEn ? card.dataset.descEn  : card.dataset.descJa;
+            const tag   = isEn ? card.dataset.tagEn   : card.dataset.tagJa;
+
+            menuModalImg.src = card.dataset.src;
+            menuModalImg.alt = name;
+            menuModalName.textContent = name;
+            menuModalDesc.textContent = desc;
+
+            menuModalPrice.innerHTML = card.dataset.price;
+            if (tag) {
+                menuModalPrice.innerHTML += `<span class="menu-modal-tag">${tag}</span>`;
+            }
+
+            menuModal.classList.add('open');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeMenuModal() {
+            menuModal.classList.remove('open');
+            document.body.style.overflow = '';
+        }
+
+        document.querySelectorAll('.menu-photo-card').forEach(card => {
+            card.addEventListener('click', () => openMenuModal(card));
+        });
+
+        menuModalClose.addEventListener('click', closeMenuModal);
+        menuModal.addEventListener('click', e => {
+            if (e.target === menuModal) closeMenuModal();
+        });
+        document.addEventListener('keydown', e => {
+            if (e.key === 'Escape') closeMenuModal();
+        });
     </script>
 </body>
 </html>
