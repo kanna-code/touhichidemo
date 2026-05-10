@@ -313,6 +313,8 @@
             color: #f0e8d8;
             text-shadow: 0 2px 30px rgba(0,0,0,0.7);
             margin-bottom: 2.5rem;
+            flex-shrink: 0;
+            white-space: nowrap;
         }
 
         .hero-catch em {
@@ -805,14 +807,19 @@
         /* メニュー写真グリッド */
         .menu-photo-grid {
             display: grid;
-            grid-template-columns: 1fr 1fr;
+            grid-template-columns: 1fr 1fr 1fr;
             gap: 4px;
         }
 
         .menu-photo-card {
             position: relative;
             overflow: hidden;
-            aspect-ratio: 3/2;
+            aspect-ratio: 1;
+        }
+
+        .menu-photo-card:first-child {
+            grid-column: 1 / -1;
+            aspect-ratio: 16/9;
         }
 
         .menu-photo-card img {
@@ -820,12 +827,12 @@
             height: 100%;
             object-fit: cover;
             display: block;
-            filter: brightness(0.88);
+            filter: brightness(0.85);
             transition: transform 0.5s ease, filter 0.5s ease;
         }
 
         .menu-photo-card:hover img {
-            transform: scale(1.04);
+            transform: scale(1.05);
             filter: brightness(1);
         }
 
@@ -834,13 +841,19 @@
             bottom: 0;
             left: 0;
             right: 0;
-            padding: 36px 12px 12px;
-            background: linear-gradient(to top, rgba(0,0,0,0.75), transparent);
+            padding: 22px 10px 10px;
+            background: linear-gradient(to top, rgba(0,0,0,0.82), transparent);
             color: #f0e8d8;
             font-family: 'Noto Serif JP', serif;
-            font-size: 0.82rem;
-            letter-spacing: 0.06em;
+            font-size: 0.7rem;
+            letter-spacing: 0.04em;
             line-height: 1.4;
+        }
+
+        .menu-photo-card:first-child .menu-photo-name {
+            font-size: 0.9rem;
+            letter-spacing: 0.06em;
+            padding: 48px 16px 14px;
         }
 
         /* ============================================================
@@ -1676,8 +1689,8 @@
             </div>
             <div class="faq-list fade-in">
                 <div class="faq-item">
-                    <p class="faq-q"><span class="q-mark">Q</span><span class="lang-ja">テイクアウトはできますか？</span><span class="lang-en">Is take-out available?</span></p>
-                    <p class="faq-a"><span class="a-mark">A</span><span><span class="lang-ja">らぁ麺のテイクアウトはできませんが、丼ぶり等のサイドメニューは対応可能です。※混雑時は対応いたしかねます。Uber Eatsにも対応しております。</span><span class="lang-en">Ramen take-out is unavailable, but side menus are. Uber Eats available.</span></span></p>
+                    <p class="faq-q"><span class="q-mark">Q</span><span class="lang-ja">ご予約はできますか？</span><span class="lang-en">Can I make a reservation?</span></p>
+                    <p class="faq-a"><span class="a-mark">A</span><span><span class="lang-ja">はい、TableCheckにてご予約が可能な日もございます。空席状況は下記よりご確認ください。<br><a href="https://www.tablecheck.com/ja/shops/touhichi/reserve" target="_blank" rel="noopener" style="color:var(--gold);text-decoration:underline;font-family:'Noto Serif JP',serif;">TableCheck でご予約する　→</a></span><span class="lang-en">Yes, reservations are available on certain days via TableCheck.<br><a href="https://www.tablecheck.com/ja/shops/touhichi/reserve" target="_blank" rel="noopener" style="color:var(--gold);text-decoration:underline;font-family:'Noto Serif JP',serif;">Reserve via TableCheck　→</a></span></span></p>
                 </div>
                 <div class="faq-item">
                     <p class="faq-q"><span class="q-mark">Q</span><span class="lang-ja">子ども連れでも利用できますか？</span><span class="lang-en">Is it child-friendly?</span></p>
