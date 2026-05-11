@@ -259,7 +259,11 @@
             position: relative;
             height: 65svh;
             min-height: 420px;
-            background: var(--black);
+            background:
+                radial-gradient(ellipse at 14% 52%, rgba(200,168,75,0.044) 0%, transparent 46%),
+                radial-gradient(ellipse at 84% 18%, rgba(200,168,75,0.026) 0%, transparent 35%),
+                radial-gradient(ellipse at 50% 0%,  rgba(30,22,8,0.55)    0%, transparent 60%),
+                #080808;
             overflow: hidden;
         }
 
@@ -270,7 +274,7 @@
             }
         }
 
-        /* 背景ラーメン写真（全幅） */
+        /* 背景ラーメン写真（z:2 → 筆跡の前、マスクの後ろ） */
         .hero-bg-photo {
             position: absolute;
             top: 0;
@@ -282,40 +286,60 @@
             opacity: 1;
             transform: scale(0.84);
             transform-origin: center center;
+            z-index: 2;
         }
 
-        /* 左端だけ薄くマスク（テキスト可読性確保） */
+        /* 左端グラデーションマスク（z:3 → 写真の上） */
         .hero-mask {
             position: absolute;
             inset: 0;
             background: linear-gradient(
                 to right,
-                rgba(12,12,12,0.78) 0%,
-                rgba(12,12,12,0.35) 30%,
-                rgba(12,12,12,0.05) 60%,
-                rgba(12,12,12,0) 100%
+                rgba(8,8,8,0.82) 0%,
+                rgba(8,8,8,0.38) 32%,
+                rgba(8,8,8,0.06) 62%,
+                rgba(8,8,8,0) 100%
             );
-            z-index: 1;
+            z-index: 3;
         }
 
-        /* 下から上へのグラデーション */
+        /* 下部グラデーションマスク（z:4 → 写真の上） */
         .hero-mask-bottom {
             position: absolute;
             bottom: 0; left: 0; right: 0;
             height: 55%;
-            background: linear-gradient(to top, var(--black) 0%, rgba(12,12,12,0.75) 45%, transparent 100%);
-            z-index: 2;
+            background: linear-gradient(to top, #080808 0%, rgba(8,8,8,0.75) 45%, transparent 100%);
+            z-index: 4;
         }
 
-        /* 筆跡SVGアクセント */
-        .hero-brush {
+        /* 金筆SVG（写真の後ろ z:1） */
+        .hero-brushwork {
             position: absolute;
-            bottom: 22%;
-            left: -5%;
-            width: 70%;
-            z-index: 3;
-            opacity: 0.55;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            z-index: 1;
             pointer-events: none;
+            animation: brushShimmer 8s ease-in-out infinite;
+        }
+
+        @keyframes brushShimmer {
+            0%, 100% { opacity: 0.82; }
+            50%       { opacity: 1; }
+        }
+
+        /* 金粒子SVG（写真・マスクの上） */
+        .hero-particles {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            z-index: 5;
+            pointer-events: none;
+        }
+
+        /* サブテキスト金ハイライト */
+        .hero-sub-accent {
+            font-style: normal;
+            color: var(--gold-light);
         }
 
         /* コンテンツ */
@@ -324,7 +348,7 @@
             top: 0; left: 0;
             width: 100%;
             height: 100%;
-            z-index: 4;
+            z-index: 6;
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -390,7 +414,7 @@
             bottom: 8px;
             left: 50%;
             transform: translateX(-50%);
-            z-index: 5;
+            z-index: 7;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -1709,7 +1733,7 @@
         ============================================================ */
         .hero-steam {
             position: absolute;
-            z-index: 3;
+            z-index: 5;
             pointer-events: none;
             bottom: 34%;
             right: 35%;
@@ -1753,27 +1777,34 @@
            ヒーロー下 情報チップバー
         ============================================================ */
         .hero-chips-bar {
-            background: linear-gradient(to bottom, var(--black) 0%, var(--black2) 100%);
-            padding: 22px 24px 30px;
+            background: linear-gradient(to bottom, #080808 0%, var(--black2) 100%);
+            padding: 20px 24px 28px;
             display: flex;
             justify-content: center;
             align-items: center;
-            gap: 20px;
+            gap: 0;
             flex-wrap: wrap;
         }
 
         .hero-chip {
+            display: flex;
+            align-items: center;
+            gap: 8px;
             font-family: 'Noto Serif JP', serif;
             font-size: 0.7rem;
-            letter-spacing: 0.22em;
+            letter-spacing: 0.2em;
             color: rgba(200,168,75,0.72);
+            padding: 0 18px;
         }
 
+        .chip-icon { flex-shrink: 0; display: block; }
+
         .hero-chip-sep {
-            font-size: 0.6rem;
-            color: rgba(200,168,75,0.25);
+            font-size: 0.8rem;
+            color: rgba(200,168,75,0.18);
             letter-spacing: 0;
             flex-shrink: 0;
+            line-height: 1;
         }
 
         /* ============================================================
@@ -1849,24 +1880,78 @@
             <div class="steam-particle s3"></div>
         </div>
 
-        <!-- 筆跡SVGアクセント -->
-        <svg class="hero-brush" viewBox="0 0 600 80" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M-20 55 C80 20, 200 70, 350 40 C450 18, 530 55, 640 35"
-                  stroke="url(#brushGrad)" stroke-width="18" stroke-linecap="round"
-                  fill="none" opacity="0.9"/>
+        <!-- 金筆SVG装飾（多重ストローク） -->
+        <svg class="hero-brushwork" viewBox="0 0 390 800" preserveAspectRatio="xMidYMid slice" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
             <defs>
-                <linearGradient id="brushGrad" x1="0" y1="0" x2="600" y2="0">
-                    <stop offset="0%" stop-color="#c8a84b" stop-opacity="0"/>
-                    <stop offset="30%" stop-color="#c8a84b" stop-opacity="0.8"/>
-                    <stop offset="70%" stop-color="#e2c97e" stop-opacity="0.6"/>
+                <!-- メインストローク勾配（下左→上右） -->
+                <linearGradient id="bG1" x1="-30" y1="760" x2="440" y2="110" gradientUnits="userSpaceOnUse">
+                    <stop offset="0%"   stop-color="#c8a84b" stop-opacity="0"/>
+                    <stop offset="10%"  stop-color="#c8a84b" stop-opacity="0.50"/>
+                    <stop offset="38%"  stop-color="#e2c97e" stop-opacity="0.68"/>
+                    <stop offset="68%"  stop-color="#c8a84b" stop-opacity="0.48"/>
+                    <stop offset="100%" stop-color="#c8a84b" stop-opacity="0"/>
+                </linearGradient>
+                <!-- サブストローク勾配（上部横方向） -->
+                <linearGradient id="bG2" x1="-10" y1="175" x2="420" y2="88" gradientUnits="userSpaceOnUse">
+                    <stop offset="0%"   stop-color="#c8a84b" stop-opacity="0"/>
+                    <stop offset="22%"  stop-color="#c8a84b" stop-opacity="0.42"/>
+                    <stop offset="62%"  stop-color="#e2c97e" stop-opacity="0.38"/>
+                    <stop offset="100%" stop-color="#c8a84b" stop-opacity="0"/>
+                </linearGradient>
+                <!-- アクセントストローク -->
+                <linearGradient id="bG3" x1="240" y1="600" x2="430" y2="460" gradientUnits="userSpaceOnUse">
+                    <stop offset="0%"   stop-color="#c8a84b" stop-opacity="0"/>
+                    <stop offset="50%"  stop-color="#d4b460" stop-opacity="0.32"/>
                     <stop offset="100%" stop-color="#c8a84b" stop-opacity="0"/>
                 </linearGradient>
             </defs>
+
+            <!-- ★ メインストローク：大きく流れる S カーブ（下左→上右） -->
+            <path d="M -35 760 C 18 610, 78 510, 162 408 C 238 316, 318 228, 440 118"
+                  stroke="url(#bG1)" stroke-width="28" stroke-linecap="round"/>
+            <!-- 影ストローク（重なりで筆感を出す） -->
+            <path d="M -15 780 C 38 628, 96 522, 178 422 C 252 334, 328 245, 448 140"
+                  stroke="url(#bG1)" stroke-width="9" stroke-linecap="round" opacity="0.28"/>
+
+            <!-- ★ サブストローク：上部を横に流れるライン -->
+            <path d="M -12 188 C 55 142, 165 174, 290 118 C 348 96, 392 108, 422 90"
+                  stroke="url(#bG2)" stroke-width="20" stroke-linecap="round"/>
+            <path d="M  8 208 C 72 158, 178 188, 304 132"
+                  stroke="url(#bG2)" stroke-width="6" stroke-linecap="round" opacity="0.25"/>
+
+            <!-- ★ アクセントストローク：右下の短い払い -->
+            <path d="M 242 598 C 294 552, 362 528, 432 492"
+                  stroke="url(#bG3)" stroke-width="14" stroke-linecap="round"/>
+        </svg>
+
+        <!-- 金粒子（SVG SMIL アニメーション） -->
+        <svg class="hero-particles" viewBox="0 0 390 800" preserveAspectRatio="xMidYMid slice" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <circle cx="318" cy="118" r="1.4" fill="#c8a84b">
+                <animate attributeName="opacity" values="0.15;0.58;0.15" dur="3.8s" repeatCount="indefinite"/>
+            </circle>
+            <circle cx="358" cy="248" r="0.9" fill="#e2c97e">
+                <animate attributeName="opacity" values="0.08;0.42;0.08" dur="4.5s" repeatCount="indefinite" begin="0.8s"/>
+            </circle>
+            <circle cx="76"  cy="214" r="1.0" fill="#c8a84b">
+                <animate attributeName="opacity" values="0.10;0.38;0.10" dur="5.2s" repeatCount="indefinite" begin="1.6s"/>
+            </circle>
+            <circle cx="292" cy="388" r="1.2" fill="#d4b460">
+                <animate attributeName="opacity" values="0.12;0.45;0.12" dur="3.4s" repeatCount="indefinite" begin="2.2s"/>
+            </circle>
+            <circle cx="144" cy="492" r="0.8" fill="#c8a84b">
+                <animate attributeName="opacity" values="0.10;0.36;0.10" dur="4.8s" repeatCount="indefinite" begin="1.1s"/>
+            </circle>
+            <circle cx="362" cy="558" r="1.1" fill="#e2c97e">
+                <animate attributeName="opacity" values="0.08;0.35;0.08" dur="3.6s" repeatCount="indefinite" begin="0.4s"/>
+            </circle>
+            <circle cx="52"  cy="352" r="0.7" fill="#c8a84b">
+                <animate attributeName="opacity" values="0.06;0.28;0.06" dur="6.0s" repeatCount="indefinite" begin="3.0s"/>
+            </circle>
         </svg>
 
         <div class="hero-content">
             <p class="hero-sub">
-                <span class="lang-ja">素材の旨を極めた、<br>淡麗スープのらぁ麺をどうぞ。</span>
+                <span class="lang-ja">素材の旨を極めた、<br><em class="hero-sub-accent">淡麗</em>スープのらぁ麺をどうぞ。</span>
                 <span class="lang-en">Refined ramen with a light,<br>clear broth from Kyoto.</span>
             </p>
             <div class="hero-brand">
@@ -1883,11 +1968,39 @@
 
     <!-- ===== HERO CHIPS ===== -->
     <div class="hero-chips-bar">
-        <span class="hero-chip"><span class="lang-ja">ミシュラン掲載</span><span class="lang-en">Michelin Listed</span></span>
-        <span class="hero-chip-sep">—</span>
-        <span class="hero-chip"><span class="lang-ja">京都・修学院</span><span class="lang-en">Kyoto · Shugakuin</span></span>
-        <span class="hero-chip-sep">—</span>
-        <span class="hero-chip"><span class="lang-ja">淡麗鶏清湯</span><span class="lang-en">Light Chicken Broth</span></span>
+        <span class="hero-chip">
+            <!-- 月桂樹＋星アイコン（ミシュラン） -->
+            <svg class="chip-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <polygon points="12,3 13.7,8.2 19.5,8.2 14.9,11.6 16.6,16.8 12,13.4 7.4,16.8 9.1,11.6 4.5,8.2 10.3,8.2" stroke="#c8a84b" stroke-width="1.1" stroke-linejoin="round"/>
+                <path d="M7.2 8.8 C5.4 10 4 12.2 4 14.5" stroke="#c8a84b" stroke-width="1.1" stroke-linecap="round"/>
+                <path d="M16.8 8.8 C18.6 10 20 12.2 20 14.5" stroke="#c8a84b" stroke-width="1.1" stroke-linecap="round"/>
+            </svg>
+            <span class="lang-ja">ミシュラン掲載</span><span class="lang-en">Michelin Listed</span>
+        </span>
+        <span class="hero-chip-sep">|</span>
+        <span class="hero-chip">
+            <!-- 鳥居アイコン（京都） -->
+            <svg class="chip-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#c8a84b" stroke-width="1.15" stroke-linecap="round" aria-hidden="true">
+                <line x1="5.5" y1="22" x2="5.5" y2="10"/>
+                <line x1="18.5" y1="22" x2="18.5" y2="10"/>
+                <path d="M2.5 10 Q12 6.5 21.5 10"/>
+                <line x1="3.5" y1="13.5" x2="20.5" y2="13.5"/>
+            </svg>
+            <span class="lang-ja">京都・修学院</span><span class="lang-en">Kyoto · Shugakuin</span>
+        </span>
+        <span class="hero-chip-sep">|</span>
+        <span class="hero-chip">
+            <!-- 丼アイコン（淡麗鶏清湯） -->
+            <svg class="chip-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#c8a84b" stroke-width="1.15" stroke-linecap="round" aria-hidden="true">
+                <path d="M4 10 Q4 19 12 19 Q20 19 20 10"/>
+                <line x1="3" y1="10" x2="21" y2="10"/>
+                <line x1="12" y1="19" x2="12" y2="22"/>
+                <line x1="9.5" y1="22" x2="14.5" y2="22"/>
+                <path d="M9.5 7.5 Q10 5.5 10.5 7.5" stroke-width="1"/>
+                <path d="M13.5 6.5 Q14 4.5 14.5 6.5" stroke-width="1"/>
+            </svg>
+            <span class="lang-ja">淡麗鶏清湯</span><span class="lang-en">Light Chicken Broth</span>
+        </span>
     </div>
 
     <!-- ===== CONCEPT ===== -->
@@ -2208,7 +2321,7 @@
             <div class="faq-list fade-in">
                 <div class="faq-item">
                     <p class="faq-q"><span class="q-mark">Q</span><span class="lang-ja">ご予約はできますか？</span><span class="lang-en">Can I make a reservation?</span></p>
-                    <p class="faq-a"><span class="a-mark">A</span><span><span class="lang-ja">はい、TableCheckにてご予約が可能な日もございます。空席状況は下記よりご確認ください。<br><a href="https://www.tablecheck.com/ja/shops/touhichi/reserve" target="_blank" rel="noopener" style="color:var(--gold);text-decoration:underline;font-family:'Noto Serif JP',serif;">TableCheck でご予約する　→</a></span><span class="lang-en">Yes, reservations are available on certain days via TableCheck.<br><a href="https://www.tablecheck.com/ja/shops/touhichi/reserve" target="_blank" rel="noopener" style="color:var(--gold);text-decoration:underline;font-family:'Noto Serif JP',serif;">Reserve via TableCheck　→</a></span></span></p>
+                    <p class="faq-a"><span class="a-mark">A</span><span><span class="lang-ja">TableCheck（別途料金がかかります）にてご予約が可能な日もございます。空席状況は下記よりご確認ください。<br><a href="https://www.tablecheck.com/ja/shops/touhichi/reserve" target="_blank" rel="noopener" style="color:var(--gold);text-decoration:underline;font-family:'Noto Serif JP',serif;">TableCheck でご予約する　→</a></span><span class="lang-en">Yes, reservations are available on certain days via TableCheck.<br><a href="https://www.tablecheck.com/ja/shops/touhichi/reserve" target="_blank" rel="noopener" style="color:var(--gold);text-decoration:underline;font-family:'Noto Serif JP',serif;">Reserve via TableCheck　→</a></span></span></p>
                 </div>
                 <div class="faq-item">
                     <p class="faq-q"><span class="q-mark">Q</span><span class="lang-ja">子ども連れでも利用できますか？</span><span class="lang-en">Is it child-friendly?</span></p>
