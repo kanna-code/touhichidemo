@@ -1,0 +1,902 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500&family=Noto+Serif+JP:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+    <title>ラーメン図鑑 - らぁ麺 とうひち</title>
+    <style>
+        :root {
+            --gold: #c8a84b;
+            --gold-light: #e2c97e;
+            --gold-dim: rgba(200,168,75,0.18);
+            --black: #0c0c0c;
+            --black2: #141414;
+            --black3: #1c1c1c;
+            --cream: #f5f0e8;
+            --cream2: #ede6d8;
+            --text-dark: #1a1a1a;
+            --text-mid: #5a5045;
+            --text-light: #9a9080;
+        }
+
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Noto Sans JP', sans-serif;
+            background: var(--black);
+            color: #e8e0d4;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* ============================================================
+           HEADER
+        ============================================================ */
+        .zukan-header {
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            z-index: 900;
+            height: 64px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 20px;
+            background: rgba(12,12,12,0.94);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(200,168,75,0.12);
+        }
+
+        .zukan-header-logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+        }
+
+        .zukan-header-logo img {
+            height: 40px;
+            width: auto;
+        }
+
+        .back-link {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            color: rgba(200,168,75,0.8);
+            text-decoration: none;
+            font-size: 0.78rem;
+            letter-spacing: 0.12em;
+            font-family: 'Noto Serif JP', serif;
+            transition: color 0.2s;
+        }
+
+        .back-link:hover { color: var(--gold-light); }
+
+        /* ============================================================
+           HERO
+        ============================================================ */
+        .zukan-hero {
+            padding: 120px 20px 64px;
+            text-align: center;
+            background:
+                radial-gradient(ellipse at 50% 0%, rgba(200,168,75,0.07) 0%, transparent 60%),
+                var(--black);
+            border-bottom: 1px solid rgba(200,168,75,0.1);
+        }
+
+        .zukan-hero-en {
+            font-family: 'Noto Serif JP', serif;
+            font-size: 0.65rem;
+            letter-spacing: 0.45em;
+            color: rgba(200,168,75,0.6);
+            text-transform: uppercase;
+            margin-bottom: 14px;
+            display: block;
+        }
+
+        .zukan-hero-title {
+            font-family: 'Noto Serif JP', serif;
+            font-size: clamp(1.8rem, 5vw, 2.8rem);
+            font-weight: 700;
+            letter-spacing: 0.2em;
+            color: #f0e8d8;
+            margin-bottom: 20px;
+        }
+
+        .zukan-hero-desc {
+            font-size: 0.82rem;
+            color: var(--text-light);
+            line-height: 2;
+            max-width: 480px;
+            margin: 0 auto;
+        }
+
+        .gold-line {
+            display: block;
+            width: 40px;
+            height: 1px;
+            background: var(--gold);
+            margin: 20px auto 0;
+            opacity: 0.6;
+        }
+
+        /* ============================================================
+           フィルターバー
+        ============================================================ */
+        .filter-bar {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 8px;
+            padding: 32px 20px 20px;
+        }
+
+        .filter-btn {
+            padding: 7px 18px;
+            border: 1px solid rgba(200,168,75,0.28);
+            background: transparent;
+            color: rgba(200,168,75,0.7);
+            font-family: 'Noto Serif JP', serif;
+            font-size: 0.72rem;
+            letter-spacing: 0.14em;
+            border-radius: 40px;
+            cursor: pointer;
+            transition: all 0.22s;
+        }
+
+        .filter-btn:hover,
+        .filter-btn.active {
+            background: var(--gold);
+            border-color: var(--gold);
+            color: var(--black);
+        }
+
+        /* ============================================================
+           図鑑グリッド
+        ============================================================ */
+        .zukan-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1px;
+            max-width: 1080px;
+            margin: 0 auto;
+            padding: 12px 16px 80px;
+        }
+
+        @media (min-width: 600px) {
+            .zukan-grid { grid-template-columns: repeat(2, 1fr); gap: 20px; }
+        }
+
+        @media (min-width: 900px) {
+            .zukan-grid { grid-template-columns: repeat(3, 1fr); gap: 24px; }
+        }
+
+        /* ============================================================
+           図鑑カード
+        ============================================================ */
+        .zukan-card {
+            background: var(--black2);
+            border: 1px solid rgba(200,168,75,0.1);
+            border-radius: 4px;
+            overflow: hidden;
+            transition: border-color 0.3s, transform 0.35s ease, box-shadow 0.35s ease;
+            cursor: pointer;
+            margin-bottom: 1px;
+        }
+
+        @media (min-width: 600px) { .zukan-card { margin-bottom: 0; } }
+
+        .zukan-card:hover {
+            border-color: rgba(200,168,75,0.32);
+            transform: translateY(-4px);
+            box-shadow: 0 16px 40px rgba(0,0,0,0.4);
+        }
+
+        .zukan-card-photo {
+            width: 100%;
+            aspect-ratio: 4 / 3;
+            overflow: hidden;
+            position: relative;
+            background: var(--black3);
+        }
+
+        .zukan-card-photo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            transition: transform 0.55s ease;
+        }
+
+        .zukan-card:hover .zukan-card-photo img {
+            transform: scale(1.05);
+        }
+
+        .zukan-card-tag {
+            position: absolute;
+            top: 12px;
+            left: 12px;
+            padding: 4px 10px;
+            background: rgba(12,12,12,0.82);
+            border: 1px solid rgba(200,168,75,0.35);
+            color: var(--gold);
+            font-size: 0.62rem;
+            letter-spacing: 0.2em;
+            font-family: 'Noto Serif JP', serif;
+            border-radius: 2px;
+        }
+
+        .zukan-card-body {
+            padding: 18px 16px 20px;
+        }
+
+        .zukan-card-period {
+            font-size: 0.62rem;
+            letter-spacing: 0.18em;
+            color: rgba(200,168,75,0.55);
+            font-family: 'Noto Serif JP', serif;
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        .zukan-card-name {
+            font-family: 'Noto Serif JP', serif;
+            font-size: clamp(1rem, 2.5vw, 1.15rem);
+            font-weight: 700;
+            color: #f0e8d8;
+            letter-spacing: 0.04em;
+            line-height: 1.55;
+            margin-bottom: 6px;
+        }
+
+        .zukan-card-price {
+            font-family: 'Noto Serif JP', serif;
+            font-size: 0.9rem;
+            color: var(--gold);
+            letter-spacing: 0.04em;
+            margin-bottom: 14px;
+            display: block;
+        }
+
+        .zukan-card-divider {
+            width: 100%;
+            height: 1px;
+            background: rgba(200,168,75,0.12);
+            margin-bottom: 14px;
+        }
+
+        .zukan-detail-row {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .zukan-detail-item {
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+        }
+
+        .zukan-detail-label {
+            font-size: 0.6rem;
+            letter-spacing: 0.28em;
+            color: rgba(200,168,75,0.55);
+            font-family: 'Noto Serif JP', serif;
+            text-transform: uppercase;
+        }
+
+        .zukan-detail-text {
+            font-size: 0.78rem;
+            color: #c8bfb0;
+            line-height: 1.8;
+        }
+
+        /* ============================================================
+           モーダル
+        ============================================================ */
+        .zukan-modal {
+            position: fixed;
+            inset: 0;
+            z-index: 9000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+            background: rgba(0,0,0,0);
+            pointer-events: none;
+            transition: background 0.3s;
+        }
+
+        .zukan-modal.open {
+            background: rgba(0,0,0,0.88);
+            pointer-events: all;
+        }
+
+        .zukan-modal-inner {
+            background: var(--black2);
+            border: 1px solid rgba(200,168,75,0.18);
+            border-radius: 6px;
+            width: 100%;
+            max-width: 680px;
+            max-height: 88vh;
+            overflow-y: auto;
+            transform: translateY(24px) scale(0.97);
+            opacity: 0;
+            transition: transform 0.32s cubic-bezier(0.34,1.56,0.64,1), opacity 0.28s;
+        }
+
+        .zukan-modal.open .zukan-modal-inner {
+            transform: translateY(0) scale(1);
+            opacity: 1;
+        }
+
+        .zukan-modal-photo {
+            width: 100%;
+            aspect-ratio: 16 / 9;
+            overflow: hidden;
+        }
+
+        .zukan-modal-photo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .zukan-modal-body {
+            padding: 24px 20px 28px;
+        }
+
+        .zukan-modal-period {
+            font-size: 0.62rem;
+            letter-spacing: 0.2em;
+            color: rgba(200,168,75,0.55);
+            font-family: 'Noto Serif JP', serif;
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        .zukan-modal-name {
+            font-family: 'Noto Serif JP', serif;
+            font-size: clamp(1.2rem, 3vw, 1.55rem);
+            font-weight: 700;
+            color: #f0e8d8;
+            letter-spacing: 0.04em;
+            line-height: 1.5;
+            margin-bottom: 6px;
+        }
+
+        .zukan-modal-price {
+            font-family: 'Noto Serif JP', serif;
+            font-size: 1rem;
+            color: var(--gold);
+            margin-bottom: 20px;
+            display: block;
+        }
+
+        .zukan-modal-divider {
+            width: 100%;
+            height: 1px;
+            background: rgba(200,168,75,0.14);
+            margin-bottom: 20px;
+        }
+
+        .zukan-modal-details {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 18px;
+            margin-bottom: 20px;
+        }
+
+        @media (max-width: 480px) {
+            .zukan-modal-details { grid-template-columns: 1fr; }
+        }
+
+        .zukan-modal-label {
+            font-size: 0.6rem;
+            letter-spacing: 0.28em;
+            color: rgba(200,168,75,0.55);
+            font-family: 'Noto Serif JP', serif;
+            margin-bottom: 5px;
+            display: block;
+        }
+
+        .zukan-modal-text {
+            font-size: 0.82rem;
+            color: #c8bfb0;
+            line-height: 1.9;
+        }
+
+        .zukan-modal-close {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            padding: 14px;
+            background: transparent;
+            border: 1px solid rgba(200,168,75,0.2);
+            color: rgba(200,168,75,0.7);
+            font-family: 'Noto Serif JP', serif;
+            font-size: 0.78rem;
+            letter-spacing: 0.2em;
+            cursor: pointer;
+            border-radius: 3px;
+            margin-top: 8px;
+            transition: all 0.22s;
+        }
+
+        .zukan-modal-close:hover {
+            background: rgba(200,168,75,0.08);
+            color: var(--gold-light);
+        }
+
+        /* ============================================================
+           フッター
+        ============================================================ */
+        .zukan-footer {
+            text-align: center;
+            padding: 32px 20px;
+            border-top: 1px solid rgba(200,168,75,0.1);
+            font-size: 0.7rem;
+            letter-spacing: 0.14em;
+            color: rgba(200,168,75,0.4);
+            font-family: 'Noto Serif JP', serif;
+        }
+
+        /* ============================================================
+           ランキング・いいね
+        ============================================================ */
+        .rank-badge {
+            position: absolute;
+            top: 10px; right: 10px;
+            width: 40px; height: 40px;
+            border-radius: 50%;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Noto Serif JP', serif;
+            text-align: center;
+            line-height: 1.1;
+        }
+        .rank-badge.show { display: flex; }
+        .rank-badge.r1 { background: rgba(200,168,75,0.93); color: #080808; box-shadow: 0 2px 10px rgba(200,168,75,0.45); }
+        .rank-badge.r2 { background: rgba(200,200,200,0.88); color: #1a1a1a; }
+        .rank-badge.r3 { background: rgba(176,106,46,0.88); color: #fff; }
+        .rank-badge .rn { font-size: 0.9rem; font-weight: 900; }
+        .rank-badge .rl { font-size: 0.42rem; letter-spacing: 0.06em; }
+
+        .zukan-card.top1 { border-color: rgba(200,168,75,0.55); }
+        .zukan-card.top2 { border-color: rgba(190,190,190,0.38); }
+        .zukan-card.top3 { border-color: rgba(176,106,46,0.38); }
+
+        .card-like-row {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            margin-top: 16px;
+            padding-top: 12px;
+            border-top: 1px solid rgba(200,168,75,0.1);
+        }
+
+        .like-btn {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            background: none;
+            border: 1px solid rgba(200,168,75,0.22);
+            border-radius: 40px;
+            padding: 6px 14px 6px 10px;
+            cursor: pointer;
+            color: rgba(200,168,75,0.5);
+            user-select: none;
+            transition: border-color 0.2s, background 0.2s, color 0.2s;
+        }
+        .like-btn:hover { border-color: rgba(200,168,75,0.45); color: rgba(200,168,75,0.85); }
+        .like-btn.liked { border-color: rgba(200,168,75,0.55); background: rgba(200,168,75,0.07); color: var(--gold); }
+
+        .like-heart {
+            fill: none;
+            stroke: currentColor;
+            stroke-width: 1.8;
+            transition: fill 0.2s, stroke 0.2s;
+            flex-shrink: 0;
+        }
+        .like-btn.liked .like-heart { fill: var(--gold); stroke: var(--gold); }
+
+        .like-count {
+            font-size: 0.8rem;
+            font-family: 'Noto Serif JP', serif;
+            min-width: 1ch;
+        }
+
+        @keyframes heartPop {
+            0%   { transform: scale(1); }
+            35%  { transform: scale(1.5); }
+            65%  { transform: scale(0.88); }
+            100% { transform: scale(1); }
+        }
+        .like-heart.pop { animation: heartPop 0.32s ease forwards; }
+
+        /* フェードイン */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(16px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ヘッダー -->
+    <header class="zukan-header">
+        <a href="index.html" class="zukan-header-logo">
+            <img src="logo.png" alt="らぁ麺 とうひち">
+        </a>
+        <a href="index.html" class="back-link">
+            ← サイトに戻る
+        </a>
+    </header>
+
+    <!-- ヒーロー -->
+    <div class="zukan-hero">
+        <span class="zukan-hero-en">Ramen Archive</span>
+        <h1 class="zukan-hero-title">ラーメン図鑑</h1>
+        <p class="zukan-hero-desc">週替わり・季節限定で提供してきた一杯の記録。それぞれの出会いと旨みを、ここに残します。</p>
+        <span class="gold-line"></span>
+    </div>
+
+    <!-- フィルターバー -->
+    <div class="filter-bar">
+        <button class="filter-btn active" data-filter="all">すべて</button>
+        <button class="filter-btn" data-filter="醤油">醤油</button>
+        <button class="filter-btn" data-filter="塩">塩</button>
+        <button class="filter-btn" data-filter="煮干">煮干</button>
+        <button class="filter-btn" data-filter="冷やし">冷やし</button>
+        <button class="filter-btn" data-filter="まぜそば">まぜそば</button>
+    </div>
+
+    <!-- 図鑑グリッド -->
+    <div class="zukan-grid" id="zukanGrid">
+
+        <!-- ▼▼▼ ここから各エントリーを追加 ▼▼▼ -->
+
+        <div class="zukan-card fade-in" data-id="1" data-filter="醤油"
+             data-period="2024年12月" data-name="牡蠣と地鶏の淡麗醤油らぁ麺" data-price="¥1,500" data-tag="冬季限定"
+             data-photo="tokushoyu.png"
+             data-soup="広島産の牡蠣を丸ごと使った旨みと、とうひちの地鶏清湯をブレンド。牡蠣の海の香りが、醤油ダレの奥行きを際立てる冬だけの一杯。"
+             data-noodle="自家製細ストレート麺。牡蠣チャーシュー、海苔、三つ葉、柚子皮。">
+            <div class="zukan-card-photo">
+                <img src="tokushoyu.png" alt="牡蠣と地鶏の淡麗醤油らぁ麺" loading="lazy">
+                <span class="zukan-card-tag">冬季限定</span>
+                <span class="rank-badge" id="rank-1"></span>
+            </div>
+            <div class="zukan-card-body">
+                <span class="zukan-card-period">2024年12月</span>
+                <h2 class="zukan-card-name">牡蠣と地鶏の淡麗醤油らぁ麺</h2>
+                <span class="zukan-card-price">¥1,500</span>
+                <div class="zukan-card-divider"></div>
+                <div class="zukan-detail-row">
+                    <div class="zukan-detail-item"><span class="zukan-detail-label">スープ</span><span class="zukan-detail-text">牡蠣×地鶏の淡麗醤油</span></div>
+                    <div class="zukan-detail-item"><span class="zukan-detail-label">麺・具材</span><span class="zukan-detail-text">細ストレート麺 / 牡蠣・三つ葉・柚子</span></div>
+                </div>
+                <div class="card-like-row">
+                    <button class="like-btn" onclick="toggleLike(event,'1',this)" aria-label="いいね">
+                        <svg class="like-heart" viewBox="0 0 24 24" width="17" height="17"><path d="M12 21C12 21 3 13.5 3 8a5 5 0 0 1 9-3 5 5 0 0 1 9 3c0 5.5-9 13-9 13z"/></svg>
+                        <span class="like-count">0</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="zukan-card fade-in" data-id="2" data-filter="冷やし"
+             data-period="2024年8月" data-name="鱧と鶏の冷やし塩らぁ麺" data-price="¥1,600" data-tag="夏季限定"
+             data-photo="tokushoyu.png"
+             data-soup="京の夏の味覚・鱧を贅沢に使った冷やし仕立て。昆布と鶏の冷製スープが涼やかに広がり、鱧の上品な旨みが口の中に残ります。"
+             data-noodle="自家製極細ストレート麺。鱧の天ぷら、モロヘイヤ、みょうが、柚子オイル。">
+            <div class="zukan-card-photo">
+                <img src="tokushoyu.png" alt="鱧と鶏の冷やし塩らぁ麺" loading="lazy">
+                <span class="zukan-card-tag">夏季限定</span>
+                <span class="rank-badge" id="rank-2"></span>
+            </div>
+            <div class="zukan-card-body">
+                <span class="zukan-card-period">2024年8月</span>
+                <h2 class="zukan-card-name">鱧と鶏の冷やし塩らぁ麺</h2>
+                <span class="zukan-card-price">¥1,600</span>
+                <div class="zukan-card-divider"></div>
+                <div class="zukan-detail-row">
+                    <div class="zukan-detail-item"><span class="zukan-detail-label">スープ</span><span class="zukan-detail-text">鱧×昆布×鶏の冷製塩</span></div>
+                    <div class="zukan-detail-item"><span class="zukan-detail-label">麺・具材</span><span class="zukan-detail-text">極細麺 / 鱧天・みょうが・柚子油</span></div>
+                </div>
+                <div class="card-like-row">
+                    <button class="like-btn" onclick="toggleLike(event,'2',this)" aria-label="いいね">
+                        <svg class="like-heart" viewBox="0 0 24 24" width="17" height="17"><path d="M12 21C12 21 3 13.5 3 8a5 5 0 0 1 9-3 5 5 0 0 1 9 3c0 5.5-9 13-9 13z"/></svg>
+                        <span class="like-count">0</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="zukan-card fade-in" data-id="3" data-filter="煮干"
+             data-period="2024年5月" data-name="桜海老と煮干の濃厚まぜそば" data-price="¥1,300" data-tag="週替わり"
+             data-photo="tokushoyu.png"
+             data-soup="駿河湾の桜海老と国産煮干しを合わせた濃厚な魚介タレ。旨みを凝縮した混ぜダレが、麺全体に絡みつく食べ応えの一杯。"
+             data-noodle="自家製中太縮れ麺。桜海老の素揚げ、海苔、刻みネギ、温泉卵。">
+            <div class="zukan-card-photo">
+                <img src="tokushoyu.png" alt="桜海老と煮干の濃厚まぜそば" loading="lazy">
+                <span class="zukan-card-tag">週替わり</span>
+                <span class="rank-badge" id="rank-3"></span>
+            </div>
+            <div class="zukan-card-body">
+                <span class="zukan-card-period">2024年5月</span>
+                <h2 class="zukan-card-name">桜海老と煮干の濃厚まぜそば</h2>
+                <span class="zukan-card-price">¥1,300</span>
+                <div class="zukan-card-divider"></div>
+                <div class="zukan-detail-row">
+                    <div class="zukan-detail-item"><span class="zukan-detail-label">スープ</span><span class="zukan-detail-text">桜海老×煮干しの濃厚魚介タレ</span></div>
+                    <div class="zukan-detail-item"><span class="zukan-detail-label">麺・具材</span><span class="zukan-detail-text">中太縮れ麺 / 桜海老・温泉卵・海苔</span></div>
+                </div>
+                <div class="card-like-row">
+                    <button class="like-btn" onclick="toggleLike(event,'3',this)" aria-label="いいね">
+                        <svg class="like-heart" viewBox="0 0 24 24" width="17" height="17"><path d="M12 21C12 21 3 13.5 3 8a5 5 0 0 1 9-3 5 5 0 0 1 9 3c0 5.5-9 13-9 13z"/></svg>
+                        <span class="like-count">0</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="zukan-card fade-in" data-id="4" data-filter="醤油"
+             data-period="2024年3月" data-name="筍と地鶏の春醤油らぁ麺" data-price="¥1,400" data-tag="春季限定"
+             data-photo="tokushoyu.png"
+             data-soup="京都産の朝掘り筍を丸ごと炊き込んだ地鶏清湯。筍の甘みと土の香りが春を運ぶ、とうひちらしい繊細な醤油仕立て。"
+             data-noodle="自家製細ストレート麺。木の芽、筍の薄切り、鶏チャーシュー、花形ゆずの皮。">
+            <div class="zukan-card-photo">
+                <img src="tokushoyu.png" alt="筍と地鶏の春醤油らぁ麺" loading="lazy">
+                <span class="zukan-card-tag">春季限定</span>
+                <span class="rank-badge" id="rank-4"></span>
+            </div>
+            <div class="zukan-card-body">
+                <span class="zukan-card-period">2024年3月</span>
+                <h2 class="zukan-card-name">筍と地鶏の春醤油らぁ麺</h2>
+                <span class="zukan-card-price">¥1,400</span>
+                <div class="zukan-card-divider"></div>
+                <div class="zukan-detail-row">
+                    <div class="zukan-detail-item"><span class="zukan-detail-label">スープ</span><span class="zukan-detail-text">筍×地鶏の淡麗醤油</span></div>
+                    <div class="zukan-detail-item"><span class="zukan-detail-label">麺・具材</span><span class="zukan-detail-text">細麺 / 筍・木の芽・鶏チャーシュー</span></div>
+                </div>
+                <div class="card-like-row">
+                    <button class="like-btn" onclick="toggleLike(event,'4',this)" aria-label="いいね">
+                        <svg class="like-heart" viewBox="0 0 24 24" width="17" height="17"><path d="M12 21C12 21 3 13.5 3 8a5 5 0 0 1 9-3 5 5 0 0 1 9 3c0 5.5-9 13-9 13z"/></svg>
+                        <span class="like-count">0</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="zukan-card fade-in" data-id="5" data-filter="まぜそば"
+             data-period="2024年1月" data-name="黒豚と黒トリュフの贅沢まぜそば" data-price="¥2,000" data-tag="新年特別"
+             data-photo="tokushoyu.png"
+             data-soup="鹿児島産黒豚の旨みを凝縮した特製ダレに、フランス産黒トリュフを削りかけた新年限定の一品。濃厚なのに品のある後味。"
+             data-noodle="自家製中太ストレート麺。炙り黒豚チャーシュー、黒トリュフ削り、温泉卵、クレソン。">
+            <div class="zukan-card-photo">
+                <img src="tokushoyu.png" alt="黒豚と黒トリュフの贅沢まぜそば" loading="lazy">
+                <span class="zukan-card-tag">新年特別</span>
+                <span class="rank-badge" id="rank-5"></span>
+            </div>
+            <div class="zukan-card-body">
+                <span class="zukan-card-period">2024年1月</span>
+                <h2 class="zukan-card-name">黒豚と黒トリュフの贅沢まぜそば</h2>
+                <span class="zukan-card-price">¥2,000</span>
+                <div class="zukan-card-divider"></div>
+                <div class="zukan-detail-row">
+                    <div class="zukan-detail-item"><span class="zukan-detail-label">スープ</span><span class="zukan-detail-text">黒豚×黒トリュフの濃厚タレ</span></div>
+                    <div class="zukan-detail-item"><span class="zukan-detail-label">麺・具材</span><span class="zukan-detail-text">中太麺 / 炙り黒豚・黒トリュフ・温泉卵</span></div>
+                </div>
+                <div class="card-like-row">
+                    <button class="like-btn" onclick="toggleLike(event,'5',this)" aria-label="いいね">
+                        <svg class="like-heart" viewBox="0 0 24 24" width="17" height="17"><path d="M12 21C12 21 3 13.5 3 8a5 5 0 0 1 9-3 5 5 0 0 1 9 3c0 5.5-9 13-9 13z"/></svg>
+                        <span class="like-count">0</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="zukan-card fade-in" data-id="6" data-filter="塩"
+             data-period="2023年11月" data-name="松茸と地鶏の土瓶蒸し風塩らぁ麺" data-price="¥1,800" data-tag="秋季限定"
+             data-photo="tokushoyu.png"
+             data-soup="丹波産の松茸をふんだんに使い、地鶏の清湯に土瓶蒸しのエッセンスを宿した秋の名作。上品な香りが碗全体に広がります。"
+             data-noodle="自家製細ストレート麺。松茸の炒め、鶏チャーシュー、三つ葉、柚子皮。">
+            <div class="zukan-card-photo">
+                <img src="tokushoyu.png" alt="松茸と地鶏の土瓶蒸し風塩らぁ麺" loading="lazy">
+                <span class="zukan-card-tag">秋季限定</span>
+                <span class="rank-badge" id="rank-6"></span>
+            </div>
+            <div class="zukan-card-body">
+                <span class="zukan-card-period">2023年11月</span>
+                <h2 class="zukan-card-name">松茸と地鶏の土瓶蒸し風塩らぁ麺</h2>
+                <span class="zukan-card-price">¥1,800</span>
+                <div class="zukan-card-divider"></div>
+                <div class="zukan-detail-row">
+                    <div class="zukan-detail-item"><span class="zukan-detail-label">スープ</span><span class="zukan-detail-text">松茸×地鶏の淡麗塩</span></div>
+                    <div class="zukan-detail-item"><span class="zukan-detail-label">麺・具材</span><span class="zukan-detail-text">細麺 / 松茸・鶏チャーシュー・柚子</span></div>
+                </div>
+                <div class="card-like-row">
+                    <button class="like-btn" onclick="toggleLike(event,'6',this)" aria-label="いいね">
+                        <svg class="like-heart" viewBox="0 0 24 24" width="17" height="17"><path d="M12 21C12 21 3 13.5 3 8a5 5 0 0 1 9-3 5 5 0 0 1 9 3c0 5.5-9 13-9 13z"/></svg>
+                        <span class="like-count">0</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ▲▲▲ エントリーここまで ▲▲▲ -->
+
+    </div>
+
+    <!-- モーダル -->
+    <div class="zukan-modal" id="zukanModal">
+        <div class="zukan-modal-inner">
+            <div class="zukan-modal-photo">
+                <img id="modalPhoto" src="" alt="">
+            </div>
+            <div class="zukan-modal-body">
+                <span class="zukan-modal-period" id="modalPeriod"></span>
+                <h2 class="zukan-modal-name" id="modalName"></h2>
+                <span class="zukan-modal-price" id="modalPrice"></span>
+                <div class="zukan-modal-divider"></div>
+                <div class="zukan-modal-details">
+                    <div>
+                        <span class="zukan-modal-label">スープ</span>
+                        <p class="zukan-modal-text" id="modalSoup"></p>
+                    </div>
+                    <div>
+                        <span class="zukan-modal-label">麺・トッピング</span>
+                        <p class="zukan-modal-text" id="modalNoodle"></p>
+                    </div>
+                </div>
+                <button class="zukan-modal-close" id="modalClose">閉じる　↑</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- フッター -->
+    <footer class="zukan-footer">
+        © らぁ麺 とうひち　Ramen Tohichi, Kyoto
+    </footer>
+
+    <script>
+        // フェードイン
+        const io = new IntersectionObserver(entries => {
+            entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); } });
+        }, { threshold: 0.08 });
+        document.querySelectorAll('.fade-in').forEach(el => io.observe(el));
+
+        // ============================================================
+        //  いいね & ランキング
+        // ============================================================
+        const LIKES_KEY  = 'touhichi_zukan_likes';   // { id: count }
+        const LIKED_KEY  = 'touhichi_zukan_liked';   // { id: true }
+
+        let likes  = JSON.parse(localStorage.getItem(LIKES_KEY)  || '{}');
+        let liked  = JSON.parse(localStorage.getItem(LIKED_KEY)  || '{}');
+
+        function save() {
+            localStorage.setItem(LIKES_KEY, JSON.stringify(likes));
+            localStorage.setItem(LIKED_KEY, JSON.stringify(liked));
+        }
+
+        function toggleLike(e, id, btn) {
+            e.stopPropagation();
+            const isLiked = !!liked[id];
+            liked[id] = !isLiked;
+            likes[id] = Math.max(0, (likes[id] || 0) + (isLiked ? -1 : 1));
+            save();
+            renderLikeBtn(id, btn);
+            if (!isLiked) {
+                const heart = btn.querySelector('.like-heart');
+                heart.classList.remove('pop');
+                void heart.offsetWidth;
+                heart.classList.add('pop');
+                heart.addEventListener('animationend', () => heart.classList.remove('pop'), { once: true });
+            }
+            sortAndRank();
+        }
+
+        function renderLikeBtn(id, btn) {
+            btn.querySelector('.like-count').textContent = likes[id] || 0;
+            btn.classList.toggle('liked', !!liked[id]);
+        }
+
+        function sortAndRank() {
+            const grid = document.getElementById('zukanGrid');
+            const allCards = [...document.querySelectorAll('.zukan-card')];
+
+            // いいね数でソート（同数は元の順序維持）
+            allCards.sort((a, b) => (likes[b.dataset.id] || 0) - (likes[a.dataset.id] || 0));
+
+            // ランククラスをリセット
+            allCards.forEach(c => c.classList.remove('top1','top2','top3'));
+
+            // ランクバッジを更新
+            allCards.forEach((card, i) => {
+                const id    = card.dataset.id;
+                const badge = document.getElementById('rank-' + id);
+                const count = likes[id] || 0;
+                badge.className = 'rank-badge';
+                badge.innerHTML = '';
+                if (count > 0 && i < 3) {
+                    const labels = ['r1','r2','r3'];
+                    const medals = ['1','2','3'];
+                    badge.classList.add('show', labels[i]);
+                    badge.innerHTML = `<span class="rn">${medals[i]}</span><span class="rl">位</span>`;
+                    card.classList.add(['top1','top2','top3'][i]);
+                }
+                // DOM順を並べ替え
+                grid.appendChild(card);
+            });
+        }
+
+        // 初期レンダリング
+        document.querySelectorAll('.zukan-card').forEach(card => {
+            const id  = card.dataset.id;
+            const btn = card.querySelector('.like-btn');
+            renderLikeBtn(id, btn);
+        });
+        sortAndRank();
+
+        // ============================================================
+        //  フィルター
+        // ============================================================
+        const filterBtns = document.querySelectorAll('.filter-btn');
+        filterBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                filterBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                const filter = btn.dataset.filter;
+                document.querySelectorAll('.zukan-card').forEach(card => {
+                    card.style.display = (filter === 'all' || card.dataset.filter === filter) ? '' : 'none';
+                });
+            });
+        });
+
+        // ============================================================
+        //  モーダル
+        // ============================================================
+        const modal = document.getElementById('zukanModal');
+        const modalClose = document.getElementById('modalClose');
+
+        function openModal(card) {
+            document.getElementById('modalPhoto').src  = card.dataset.photo;
+            document.getElementById('modalPhoto').alt  = card.dataset.name;
+            document.getElementById('modalPeriod').textContent = card.dataset.period;
+            document.getElementById('modalName').textContent   = card.dataset.name;
+            document.getElementById('modalPrice').textContent  = card.dataset.price;
+            document.getElementById('modalSoup').textContent   = card.dataset.soup;
+            document.getElementById('modalNoodle').textContent = card.dataset.noodle;
+            modal.classList.add('open');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal() {
+            modal.classList.remove('open');
+            document.body.style.overflow = '';
+        }
+
+        document.querySelectorAll('.zukan-card').forEach(card => {
+            card.addEventListener('click', () => openModal(card));
+        });
+        modalClose.addEventListener('click', closeModal);
+        modal.addEventListener('click', e => { if (e.target === modal) closeModal(); });
+        document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+    </script>
+
+</body>
+</html>

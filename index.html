@@ -281,12 +281,19 @@
             right: 0;
             width: 100%;
             height: 100%;
-            object-fit: cover;
-            object-position: center 28%;
+            object-fit: contain;
+            object-position: center center;
             opacity: 1;
-            transform: scale(0.84);
-            transform-origin: center center;
             z-index: 2;
+        }
+
+        @media (min-width: 768px) {
+            .hero-bg-photo {
+                object-fit: cover;
+                object-position: center 28%;
+                transform: scale(0.84);
+                transform-origin: center center;
+            }
         }
 
         /* 左端グラデーションマスク（z:3 → 写真の上） */
@@ -327,16 +334,7 @@
             50%       { opacity: 1; }
         }
 
-        /* 金粒子SVG（写真・マスクの上） */
-        .hero-particles {
-            position: absolute;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            z-index: 5;
-            pointer-events: none;
-        }
-
-        /* サブテキスト金ハイライト */
+/* サブテキスト金ハイライト */
         .hero-sub-accent {
             font-style: normal;
             color: var(--gold-light);
@@ -841,10 +839,9 @@
 
         .menu-full-row {
             display: flex;
-            justify-content: space-between;
             align-items: center;
             padding: 14px 4px;
-            gap: 12px;
+            gap: 10px;
         }
 
         .menu-full-name {
@@ -853,6 +850,7 @@
             color: var(--text-dark);
             letter-spacing: 0.04em;
             line-height: 1.5;
+            flex: 1;
         }
 
         .menu-full-price {
@@ -862,6 +860,108 @@
             color: var(--text-dark);
             white-space: nowrap;
             flex-shrink: 0;
+        }
+
+        /* アコーディオン説明 */
+        .menu-list-item.has-desc .menu-full-row {
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .menu-desc-chevron {
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            transition: transform 0.3s ease;
+            color: var(--gold);
+            margin-left: 8px;
+        }
+
+        .menu-list-item.open .menu-desc-chevron {
+            transform: rotate(180deg);
+        }
+
+        .menu-desc-body {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.45s ease, opacity 0.3s ease;
+            opacity: 0;
+        }
+
+        .menu-list-item.open .menu-desc-body {
+            max-height: 240px;
+            opacity: 1;
+        }
+
+        .menu-desc-inner {
+            display: flex;
+            gap: 14px;
+            align-items: flex-start;
+            padding: 12px 4px 16px;
+            border-top: 1px solid rgba(200,168,75,0.15);
+        }
+
+        .menu-desc-photo {
+            flex-shrink: 0;
+            width: 88px;
+            height: 80px;
+            border-radius: 6px;
+            overflow: hidden;
+            cursor: zoom-in;
+        }
+
+        .menu-desc-photo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            transition: transform 0.3s ease;
+        }
+
+        .menu-desc-photo:hover img {
+            transform: scale(1.06);
+        }
+
+        /* 写真ライトボックス */
+        #photoLightbox {
+            position: fixed;
+            inset: 0;
+            z-index: 9999;
+            background: rgba(0,0,0,0.92);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.28s ease;
+            cursor: zoom-out;
+        }
+
+        #photoLightbox.open {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        #photoLightbox img {
+            max-width: 100%;
+            max-height: 82vh;
+            object-fit: contain;
+            border-radius: 10px;
+            transform: scale(0.88);
+            transition: transform 0.32s cubic-bezier(0.34,1.56,0.64,1);
+            box-shadow: 0 24px 64px rgba(0,0,0,0.6);
+        }
+
+        #photoLightbox.open img {
+            transform: scale(1);
+        }
+
+        .menu-desc-text {
+            flex: 1;
+            font-size: 0.78rem;
+            color: var(--text-mid);
+            line-height: 1.95;
         }
 
         /* 閉じるボタン */
@@ -897,17 +997,18 @@
            メニュー フィーチャーレイアウト
         ============================================================ */
 
-        /* メインフィーチャー */
+        /* メインフィーチャー（モバイルデフォルト：縦積み） */
         .menu-feature {
-            display: grid;
-            grid-template-columns: 5fr 6fr;
-            gap: 20px;
-            align-items: center;
+            display: flex;
+            flex-direction: column;
+            gap: 0;
             margin-bottom: 52px;
             cursor: pointer;
         }
 
-        .menu-feature-info { padding-right: 4px; }
+        .menu-feature-info {
+            padding: 20px 4px 0;
+        }
 
         .menu-feature-label {
             display: inline-block;
@@ -960,11 +1061,12 @@
             display: flex;
             justify-content: center;
             align-items: center;
+            order: -1;
         }
 
         .menu-feature-photo img {
             width: 100%;
-            max-width: 400px;
+            max-width: 100%;
             height: auto;
             object-fit: contain;
             display: block;
@@ -1717,7 +1819,16 @@
             .hero-content { padding: 44px 10% 136px 6%; }
             .concept-imgs { grid-template-rows: 240px 240px; }
             .access-photo { height: 380px; }
-            .menu-feature { gap: 40px; margin-bottom: 64px; }
+            .menu-feature {
+                display: grid;
+                grid-template-columns: 5fr 6fr;
+                gap: 40px;
+                align-items: center;
+                margin-bottom: 64px;
+            }
+            .menu-feature-photo { order: 0; }
+            .menu-feature-photo img { max-width: 400px; }
+            .menu-feature-info { padding: 0 4px; }
             .menu-feature-name { font-size: clamp(1.6rem, 2.8vw, 2rem); }
             .menu-sub-grid { gap: 20px; }
             .menu-sub-info { padding: 14px 16px 18px; }
@@ -1925,29 +2036,6 @@
         </svg>
 
         <!-- 金粒子（SVG SMIL アニメーション） -->
-        <svg class="hero-particles" viewBox="0 0 390 800" preserveAspectRatio="xMidYMid slice" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-            <circle cx="318" cy="118" r="1.4" fill="#c8a84b">
-                <animate attributeName="opacity" values="0.15;0.58;0.15" dur="3.8s" repeatCount="indefinite"/>
-            </circle>
-            <circle cx="358" cy="248" r="0.9" fill="#e2c97e">
-                <animate attributeName="opacity" values="0.08;0.42;0.08" dur="4.5s" repeatCount="indefinite" begin="0.8s"/>
-            </circle>
-            <circle cx="76"  cy="214" r="1.0" fill="#c8a84b">
-                <animate attributeName="opacity" values="0.10;0.38;0.10" dur="5.2s" repeatCount="indefinite" begin="1.6s"/>
-            </circle>
-            <circle cx="292" cy="388" r="1.2" fill="#d4b460">
-                <animate attributeName="opacity" values="0.12;0.45;0.12" dur="3.4s" repeatCount="indefinite" begin="2.2s"/>
-            </circle>
-            <circle cx="144" cy="492" r="0.8" fill="#c8a84b">
-                <animate attributeName="opacity" values="0.10;0.36;0.10" dur="4.8s" repeatCount="indefinite" begin="1.1s"/>
-            </circle>
-            <circle cx="362" cy="558" r="1.1" fill="#e2c97e">
-                <animate attributeName="opacity" values="0.08;0.35;0.08" dur="3.6s" repeatCount="indefinite" begin="0.4s"/>
-            </circle>
-            <circle cx="52"  cy="352" r="0.7" fill="#c8a84b">
-                <animate attributeName="opacity" values="0.06;0.28;0.06" dur="6.0s" repeatCount="indefinite" begin="3.0s"/>
-            </circle>
-        </svg>
 
         <div class="hero-content">
             <p class="hero-sub">
@@ -2019,10 +2107,6 @@
                 <span class="lang-ja">京都、洛北の地から、鶏と水、そして生揚げ醤油だけで創り上げる「引き算の美学」を追求したらぁ麺をお届けしています。化学調味料に頼らず、素材本来の力を極限まで引き出した一杯。屋号「とうひち」には、地域に根ざし世代を超えて愛される存在でありたいという願いが込められています。</span>
                 <span class="lang-en">From Rakuhoku, Kyoto, we pursue the "aesthetics of subtraction" — ramen made only from chicken, water, and unpasteurized soy sauce. No MSG, just the pure power of each ingredient.</span>
             </p>
-            <a href="#menu" class="concept-more fade-in">
-                <span class="lang-ja">詳しく見る　→</span>
-                <span class="lang-en">Learn more　→</span>
-            </a>
             <div class="concept-imgs fade-in">
                 <img src="tokushoyu.png" alt="らぁ麺" class="img-main">
                 <img src="taisho.jpg" alt="素材">
@@ -2064,8 +2148,8 @@
             </ul>
             <div class="news-more-wrap fade-in">
                 <a href="https://www.instagram.com/touhichi_/" target="_blank" rel="noopener" class="news-more">
-                    <span class="lang-ja">お知らせ一覧へ　→</span>
-                    <span class="lang-en">View all news　→</span>
+                    <span class="lang-ja">最新情報は Instagram をチェック　→</span>
+                    <span class="lang-en">Follow us on Instagram for updates　→</span>
                 </a>
             </div>
         </div>
@@ -2219,16 +2303,86 @@
                     <span class="lang-en">Ramen / Tsukesoba / Mazesoba</span>
                 </div>
                 <ul class="menu-list menu-full-list">
-                    <li class="menu-list-item"><div class="menu-full-row"><span class="menu-full-name"><span class="lang-ja">特製 鶏醤油らぁ麺</span><span class="lang-en">Special Chicken Soy Sauce</span></span><span class="menu-full-price">¥1,700</span></div></li>
-                    <li class="menu-list-item"><div class="menu-full-row"><span class="menu-full-name"><span class="lang-ja">鶏醤油らぁ麺</span><span class="lang-en">Chicken Soy Sauce Ramen</span></span><span class="menu-full-price">¥1,300</span></div></li>
-                    <li class="menu-list-item"><div class="menu-full-row"><span class="menu-full-name"><span class="lang-ja">特製 鶏醤油つけそば</span><span class="lang-en">Special Dipping Noodles</span></span><span class="menu-full-price">¥2,200</span></div></li>
-                    <li class="menu-list-item"><div class="menu-full-row"><span class="menu-full-name"><span class="lang-ja">鶏醤油つけそば</span><span class="lang-en">Chicken Dipping Noodles</span></span><span class="menu-full-price">¥1,700</span></div></li>
-                    <li class="menu-list-item"><div class="menu-full-row"><span class="menu-full-name"><span class="lang-ja">特製 煮干らぁ麺</span><span class="lang-en">Special Sardine Ramen</span></span><span class="menu-full-price">¥1,700</span></div></li>
-                    <li class="menu-list-item"><div class="menu-full-row"><span class="menu-full-name"><span class="lang-ja">煮干らぁ麺</span><span class="lang-en">Sardine Ramen</span></span><span class="menu-full-price">¥1,300</span></div></li>
-                    <li class="menu-list-item"><div class="menu-full-row"><span class="menu-full-name"><span class="lang-ja">特製 鶏白湯らぁ麺 <span class="menu-tag lang-ja">夏季販売停止</span></span><span class="lang-en">Special Chicken Paitan <span class="menu-tag">Summer: unavailable</span></span></span><span class="menu-full-price">¥1,700</span></div></li>
-                    <li class="menu-list-item"><div class="menu-full-row"><span class="menu-full-name"><span class="lang-ja">鶏白湯らぁ麺 <span class="menu-tag lang-ja">夏季販売停止</span></span><span class="lang-en">Chicken Paitan <span class="menu-tag">Summer: unavailable</span></span></span><span class="menu-full-price">¥1,300</span></div></li>
-                    <li class="menu-list-item"><div class="menu-full-row"><span class="menu-full-name"><span class="lang-ja">鶏油まぜそば</span><span class="lang-en">Chicken Oil Maze-Soba</span></span><span class="menu-full-price">¥1,100</span></div></li>
-                    <li class="menu-list-item"><div class="menu-full-row"><span class="menu-full-name"><span class="lang-ja">豚まぜそば <span class="menu-tag lang-ja">夜限定</span></span><span class="lang-en">Pork Maze-Soba <span class="menu-tag">Night only</span></span></span><span class="menu-full-price">¥1,100</span></div></li>
+                    <li class="menu-list-item has-desc">
+                        <div class="menu-full-row" onclick="toggleMenuDesc(this.parentElement)">
+                            <span class="menu-full-name"><span class="lang-ja">特製 鶏醤油らぁ麺</span><span class="lang-en">Special Chicken Soy Sauce</span></span>
+                            <span class="menu-full-price">¥1,700</span>
+                            <span class="menu-desc-chevron"><svg width="11" height="7" viewBox="0 0 11 7" fill="none"><path d="M1 1l4.5 4.5L10 1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></span>
+                        </div>
+                        <div class="menu-desc-body"><div class="menu-desc-inner"><div class="menu-desc-photo"><img src="tokushoyu.png" alt="特製 鶏醤油らぁ麺" loading="lazy"></div><p class="menu-desc-text"><span class="lang-ja">炙り豚バラチャーシュー、ワンタン、味玉を添えた至高の一杯。鶏の旨みを引き出した淡麗スープが、特製トッピングと見事に調和します。</span><span class="lang-en">Our signature bowl with roasted pork belly chashu, wontons, and a marinated egg. The delicate chicken broth harmonizes beautifully with each premium topping.</span></p></div></div>
+                    </li>
+                    <li class="menu-list-item has-desc">
+                        <div class="menu-full-row" onclick="toggleMenuDesc(this.parentElement)">
+                            <span class="menu-full-name"><span class="lang-ja">鶏醤油らぁ麺</span><span class="lang-en">Chicken Soy Sauce Ramen</span></span>
+                            <span class="menu-full-price">¥1,300</span>
+                            <span class="menu-desc-chevron"><svg width="11" height="7" viewBox="0 0 11 7" fill="none"><path d="M1 1l4.5 4.5L10 1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></span>
+                        </div>
+                        <div class="menu-desc-body"><div class="menu-desc-inner"><div class="menu-desc-photo"><img src="shoyu.png" alt="鶏醤油らぁ麺" loading="lazy"></div><p class="menu-desc-text"><span class="lang-ja">厳選した地鶏のガラと丸鶏を長時間炊き出した淡麗鶏清湯スープ。自家製醤油ダレが引き立てる、とうひちの原点となる一杯。</span><span class="lang-en">Clear and delicate chicken broth slow-simmered from free-range bones and whole birds, paired with house-made soy tare — the original bowl that defines Tohichi.</span></p></div></div>
+                    </li>
+                    <li class="menu-list-item has-desc">
+                        <div class="menu-full-row" onclick="toggleMenuDesc(this.parentElement)">
+                            <span class="menu-full-name"><span class="lang-ja">特製 鶏醤油つけそば</span><span class="lang-en">Special Dipping Noodles</span></span>
+                            <span class="menu-full-price">¥2,200</span>
+                            <span class="menu-desc-chevron"><svg width="11" height="7" viewBox="0 0 11 7" fill="none"><path d="M1 1l4.5 4.5L10 1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></span>
+                        </div>
+                        <div class="menu-desc-body"><div class="menu-desc-inner"><div class="menu-desc-photo"><img src="tokutsuke.png" alt="特製 鶏醤油つけそば" loading="lazy"></div><p class="menu-desc-text"><span class="lang-ja">昆布水に浸した自家製細麺を、熱々の地鶏スープにくぐらせてお召し上がりください。炙り豚バラ、ワンタン、味玉入りの贅沢な一品。</span><span class="lang-en">House-made thin noodles soaked in kelp water, served with hot free-range chicken dipping broth. Includes roasted pork belly, wontons, and a marinated egg.</span></p></div></div>
+                    </li>
+                    <li class="menu-list-item has-desc">
+                        <div class="menu-full-row" onclick="toggleMenuDesc(this.parentElement)">
+                            <span class="menu-full-name"><span class="lang-ja">鶏醤油つけそば</span><span class="lang-en">Chicken Dipping Noodles</span></span>
+                            <span class="menu-full-price">¥1,700</span>
+                            <span class="menu-desc-chevron"><svg width="11" height="7" viewBox="0 0 11 7" fill="none"><path d="M1 1l4.5 4.5L10 1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></span>
+                        </div>
+                        <div class="menu-desc-body"><div class="menu-desc-inner"><div class="menu-desc-photo"><img src="tokutsuke.png" alt="鶏醤油つけそば" loading="lazy"></div><p class="menu-desc-text"><span class="lang-ja">昆布水に浸した自家製細麺と、凝縮した地鶏つけ汁の相性は抜群。鶏の旨みをダイレクトに味わう一杯。</span><span class="lang-en">House-made noodles soaked in kelp water, dipped into concentrated free-range chicken broth. A pure expression of chicken umami.</span></p></div></div>
+                    </li>
+                    <li class="menu-list-item has-desc">
+                        <div class="menu-full-row" onclick="toggleMenuDesc(this.parentElement)">
+                            <span class="menu-full-name"><span class="lang-ja">特製 煮干らぁ麺</span><span class="lang-en">Special Sardine Ramen</span></span>
+                            <span class="menu-full-price">¥1,700</span>
+                            <span class="menu-desc-chevron"><svg width="11" height="7" viewBox="0 0 11 7" fill="none"><path d="M1 1l4.5 4.5L10 1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></span>
+                        </div>
+                        <div class="menu-desc-body"><div class="menu-desc-inner"><div class="menu-desc-photo"><img src="tokuniboshi.png" alt="特製 煮干らぁ麺" loading="lazy"></div><p class="menu-desc-text"><span class="lang-ja">数種の煮干しをブレンドした100%魚介スープに、炙り豚バラ、ワンタン、味玉を添えた豪華な一杯。豊かな旨みとキレのある後味が特徴です。</span><span class="lang-en">100% seafood broth blended from multiple dried sardine varieties, topped with roasted pork belly, wontons, and a marinated egg. Rich umami with a clean finish.</span></p></div></div>
+                    </li>
+                    <li class="menu-list-item has-desc">
+                        <div class="menu-full-row" onclick="toggleMenuDesc(this.parentElement)">
+                            <span class="menu-full-name"><span class="lang-ja">煮干らぁ麺</span><span class="lang-en">Sardine Ramen</span></span>
+                            <span class="menu-full-price">¥1,300</span>
+                            <span class="menu-desc-chevron"><svg width="11" height="7" viewBox="0 0 11 7" fill="none"><path d="M1 1l4.5 4.5L10 1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></span>
+                        </div>
+                        <div class="menu-desc-body"><div class="menu-desc-inner"><div class="menu-desc-photo"><img src="niboshi.png" alt="煮干らぁ麺" loading="lazy"></div><p class="menu-desc-text"><span class="lang-ja">厳選した煮干しの旨みと香りを丁寧に引き出した、キレのある魚介スープ。余韻まで美しい一杯。</span><span class="lang-en">Carefully extracted dried sardine umami and fragrance, delivering a seafood broth with a beautiful, lingering finish.</span></p></div></div>
+                    </li>
+                    <li class="menu-list-item has-desc">
+                        <div class="menu-full-row" onclick="toggleMenuDesc(this.parentElement)">
+                            <span class="menu-full-name"><span class="lang-ja">特製 鶏白湯らぁ麺 <span class="menu-tag lang-ja">夏季販売停止</span></span><span class="lang-en">Special Chicken Paitan <span class="menu-tag">Summer: unavailable</span></span></span>
+                            <span class="menu-full-price">¥1,700</span>
+                            <span class="menu-desc-chevron"><svg width="11" height="7" viewBox="0 0 11 7" fill="none"><path d="M1 1l4.5 4.5L10 1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></span>
+                        </div>
+                        <div class="menu-desc-body"><div class="menu-desc-inner"><div class="menu-desc-photo"><img src="tokupaitan.png" alt="特製 鶏白湯らぁ麺" loading="lazy"></div><p class="menu-desc-text"><span class="lang-ja">地鶏を丁寧に炊き上げた濃厚でまろやかな白湯スープに、炙り豚バラ、ワンタン、味玉を豪華に添えた一杯。クリーミーな口当たりが麺によく絡みます。</span><span class="lang-en">Rich, mellow chicken paitan broth slowly simmered to perfection, generously topped with roasted pork belly, wontons, and a marinated egg. Creamy and deeply satisfying.</span></p></div></div>
+                    </li>
+                    <li class="menu-list-item has-desc">
+                        <div class="menu-full-row" onclick="toggleMenuDesc(this.parentElement)">
+                            <span class="menu-full-name"><span class="lang-ja">鶏白湯らぁ麺 <span class="menu-tag lang-ja">夏季販売停止</span></span><span class="lang-en">Chicken Paitan <span class="menu-tag">Summer: unavailable</span></span></span>
+                            <span class="menu-full-price">¥1,300</span>
+                            <span class="menu-desc-chevron"><svg width="11" height="7" viewBox="0 0 11 7" fill="none"><path d="M1 1l4.5 4.5L10 1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></span>
+                        </div>
+                        <div class="menu-desc-body"><div class="menu-desc-inner"><div class="menu-desc-photo"><img src="paitan.png" alt="鶏白湯らぁ麺" loading="lazy"></div><p class="menu-desc-text"><span class="lang-ja">地鶏を丸ごと炊き上げたクリーミーな鶏白湯スープ。とろりと滑らかなスープが、自家製麺との絶妙なハーモニーを生み出します。</span><span class="lang-en">Whole free-range chicken simmered into a creamy paitan broth. The silky smooth texture creates beautiful harmony with our house-made noodles.</span></p></div></div>
+                    </li>
+                    <li class="menu-list-item has-desc">
+                        <div class="menu-full-row" onclick="toggleMenuDesc(this.parentElement)">
+                            <span class="menu-full-name"><span class="lang-ja">鶏油まぜそば</span><span class="lang-en">Chicken Oil Maze-Soba</span></span>
+                            <span class="menu-full-price">¥1,100</span>
+                            <span class="menu-desc-chevron"><svg width="11" height="7" viewBox="0 0 11 7" fill="none"><path d="M1 1l4.5 4.5L10 1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></span>
+                        </div>
+                        <div class="menu-desc-body"><div class="menu-desc-inner"><div class="menu-desc-photo"><img src="maze.png" alt="鶏油まぜそば" loading="lazy"></div><p class="menu-desc-text"><span class="lang-ja">香り高い地鶏の鶏油をベースにしたタレと自家製麺を、丁寧に混ぜてお召し上がりください。スープなしでも深く広がる、とうひちの旨みを味わえる一品。</span><span class="lang-en">House-made noodles tossed in fragrant free-range chicken oil tare. No broth needed — just deep, concentrated Tohichi umami in every bite.</span></p></div></div>
+                    </li>
+                    <li class="menu-list-item has-desc">
+                        <div class="menu-full-row" onclick="toggleMenuDesc(this.parentElement)">
+                            <span class="menu-full-name"><span class="lang-ja">豚まぜそば <span class="menu-tag lang-ja">夜限定</span></span><span class="lang-en">Pork Maze-Soba <span class="menu-tag">Night only</span></span></span>
+                            <span class="menu-full-price">¥1,100</span>
+                            <span class="menu-desc-chevron"><svg width="11" height="7" viewBox="0 0 11 7" fill="none"><path d="M1 1l4.5 4.5L10 1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></span>
+                        </div>
+                        <div class="menu-desc-body"><div class="menu-desc-inner"><div class="menu-desc-photo"><img src="butamaze.png" alt="豚まぜそば" loading="lazy"></div><p class="menu-desc-text"><span class="lang-ja">豚の旨みを凝縮した特製ダレと自家製麺を合わせた、夜のとうひちを代表する一品。ガッツリとした食べ応えの中に、丁寧な旨みが光ります。</span><span class="lang-en">House-made noodles tossed in rich, concentrated pork tare — a signature of Tohichi's evening service. Bold and satisfying, with refined depth.</span></p></div></div>
+                    </li>
                     <li class="menu-list-item"><div class="menu-full-row"><span class="menu-full-name"><span class="lang-ja">鶏醤油らぁ麺（小）</span><span class="lang-en">Chicken Soy Sauce (Small)</span></span><span class="menu-full-price">¥1,000</span></div></li>
                 </ul>
 
@@ -2621,6 +2775,42 @@
 
         document.querySelectorAll('.menu-feature, .menu-sub-card').forEach(card => {
             card.addEventListener('click', () => openMenuModal(card));
+        });
+
+        function toggleMenuDesc(item) {
+            item.classList.toggle('open');
+        }
+
+        // 写真ライトボックス
+        const photoLightbox = document.createElement('div');
+        photoLightbox.id = 'photoLightbox';
+        const photoLightboxImg = document.createElement('img');
+        photoLightbox.appendChild(photoLightboxImg);
+        document.body.appendChild(photoLightbox);
+
+        function openPhotoLightbox(src, alt) {
+            photoLightboxImg.src = src;
+            photoLightboxImg.alt = alt;
+            photoLightbox.classList.add('open');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closePhotoLightbox() {
+            photoLightbox.classList.remove('open');
+            document.body.style.overflow = '';
+        }
+
+        photoLightbox.addEventListener('click', closePhotoLightbox);
+        document.addEventListener('keydown', e => {
+            if (e.key === 'Escape') closePhotoLightbox();
+        });
+
+        document.querySelectorAll('.menu-desc-photo').forEach(photo => {
+            photo.addEventListener('click', e => {
+                e.stopPropagation();
+                const img = photo.querySelector('img');
+                openPhotoLightbox(img.src, img.alt);
+            });
         });
 
         menuModalClose.addEventListener('click', closeMenuModal);
