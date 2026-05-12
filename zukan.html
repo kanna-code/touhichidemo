@@ -12,7 +12,7 @@
             --gold: #c8a84b;
             --gold-light: #e2c97e;
             --gold-dim: rgba(200,168,75,0.18);
-            --bg: #faf8f3;
+            --bg: #e6ddd0;
             --bg-card: #ffffff;
             --bg-photo: #f0ebe0;
             --cream: #f5f0e8;
@@ -45,7 +45,7 @@
             align-items: center;
             justify-content: space-between;
             padding: 0 20px;
-            background: rgba(250,248,243,0.96);
+            background: rgba(230,221,208,0.97);
             backdrop-filter: blur(12px);
             border-bottom: 1px solid rgba(200,168,75,0.25);
         }
@@ -213,9 +213,10 @@
         ============================================================ */
         .zukan-card {
             background: var(--bg-card);
-            border: 1px solid rgba(200,168,75,0.22);
-            border-radius: 4px;
+            border: 1px solid rgba(200,168,75,0.18);
+            border-radius: 6px;
             overflow: hidden;
+            box-shadow: 0 2px 10px rgba(100,80,40,0.08);
             transition: border-color 0.3s, transform 0.35s ease, box-shadow 0.35s ease;
             cursor: pointer;
             margin-bottom: 1px;
@@ -226,15 +227,16 @@
         .zukan-card:hover {
             border-color: rgba(200,168,75,0.55);
             transform: translateY(-4px);
-            box-shadow: 0 12px 32px rgba(180,140,50,0.12);
+            box-shadow: 0 12px 28px rgba(100,80,40,0.15);
         }
 
         .zukan-card-photo {
             width: 100%;
-            aspect-ratio: 4 / 3;
+            aspect-ratio: 1 / 1;
             overflow: hidden;
             position: relative;
             background: var(--bg-photo);
+            cursor: pointer;
         }
 
         .zukan-card-photo img {
@@ -264,42 +266,85 @@
         }
 
         .zukan-card-body {
-            padding: 18px 16px 20px;
+            padding: 0 0 8px;
+        }
+
+        /* アコーディオン：トグルボタン */
+        .zukan-card-toggle {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 13px 14px 11px;
+            text-align: left;
+            gap: 8px;
+        }
+
+        .toggle-chevron {
+            flex-shrink: 0;
+            color: var(--gold);
+            opacity: 0.7;
+            transition: transform 0.3s ease;
+        }
+
+        .zukan-card-toggle[aria-expanded="true"] .toggle-chevron {
+            transform: rotate(180deg);
+        }
+
+        /* アコーディオン：中身 */
+        .zukan-card-details {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.38s ease;
+        }
+
+        .zukan-card-details.open {
+            max-height: 280px;
+        }
+
+        .zukan-card-details-inner {
+            padding: 0 14px 14px;
+        }
+
+        .zukan-period-price {
+            display: flex;
+            align-items: baseline;
+            gap: 10px;
+            margin-bottom: 10px;
         }
 
         .zukan-card-period {
-            font-size: 0.62rem;
+            font-size: 0.6rem;
             letter-spacing: 0.18em;
-            color: rgba(200,168,75,0.55);
+            color: rgba(200,168,75,0.6);
             font-family: 'Noto Serif JP', serif;
-            margin-bottom: 8px;
-            display: block;
         }
 
         .zukan-card-name {
             font-family: 'Noto Serif JP', serif;
-            font-size: clamp(1rem, 2.5vw, 1.15rem);
+            font-size: clamp(0.88rem, 2.2vw, 1rem);
             font-weight: 700;
             color: var(--text-dark);
             letter-spacing: 0.04em;
-            line-height: 1.55;
-            margin-bottom: 6px;
+            line-height: 1.5;
+            flex: 1;
         }
 
         .zukan-card-price {
             font-family: 'Noto Serif JP', serif;
-            font-size: 0.9rem;
+            font-size: 0.88rem;
             color: var(--gold);
             letter-spacing: 0.04em;
-            margin-bottom: 14px;
-            display: block;
         }
 
         .zukan-card-divider {
             width: 100%;
             height: 1px;
             background: rgba(200,168,75,0.25);
-            margin-bottom: 14px;
+            margin-bottom: 12px;
         }
 
         .zukan-detail-row {
@@ -511,9 +556,9 @@
             display: flex;
             justify-content: flex-end;
             align-items: center;
-            margin-top: 16px;
-            padding-top: 12px;
-            border-top: 1px solid rgba(200,168,75,0.2);
+            padding: 8px 14px 4px;
+            border-top: 1px solid rgba(200,168,75,0.15);
+            margin-top: 4px;
         }
 
         .like-btn {
@@ -798,18 +843,27 @@
                         <span class="rank-badge" id="rank-${id}"></span>
                     </div>
                     <div class="zukan-card-body">
-                        <span class="zukan-card-period">${period}</span>
-                        <h2 class="zukan-card-name">${name}</h2>
-                        <span class="zukan-card-price">${price}</span>
-                        <div class="zukan-card-divider"></div>
-                        <div class="zukan-detail-row">
-                            <div class="zukan-detail-item">
-                                <span class="zukan-detail-label">スープ</span>
-                                <span class="zukan-detail-text">${shortSoup}</span>
-                            </div>
-                            <div class="zukan-detail-item">
-                                <span class="zukan-detail-label">麺・具材</span>
-                                <span class="zukan-detail-text">${shortNoodle}</span>
+                        <button class="zukan-card-toggle" aria-expanded="false">
+                            <h2 class="zukan-card-name">${name}</h2>
+                            <svg class="toggle-chevron" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+                        </button>
+                        <div class="zukan-card-details">
+                            <div class="zukan-card-details-inner">
+                                <div class="zukan-period-price">
+                                    <span class="zukan-card-period">${period}</span>
+                                    <span class="zukan-card-price">${price}</span>
+                                </div>
+                                <div class="zukan-card-divider"></div>
+                                <div class="zukan-detail-row">
+                                    <div class="zukan-detail-item">
+                                        <span class="zukan-detail-label">スープ</span>
+                                        <span class="zukan-detail-text">${shortSoup}</span>
+                                    </div>
+                                    <div class="zukan-detail-item">
+                                        <span class="zukan-detail-label">麺・具材</span>
+                                        <span class="zukan-detail-text">${shortNoodle}</span>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         <div class="card-like-row">
@@ -819,6 +873,15 @@
                             </button>
                         </div>
                     </div>`;
+
+                card.querySelector('.zukan-card-toggle').addEventListener('click', e => {
+                    e.stopPropagation();
+                    const toggle = e.currentTarget;
+                    const details = card.querySelector('.zukan-card-details');
+                    const isOpen = toggle.getAttribute('aria-expanded') === 'true';
+                    toggle.setAttribute('aria-expanded', String(!isOpen));
+                    details.classList.toggle('open', !isOpen);
+                });
 
                 card.querySelector('.like-btn').addEventListener('click', e => {
                     e.stopPropagation();
@@ -898,8 +961,10 @@
         }
 
         document.getElementById('zukanGrid').addEventListener('click', e => {
-            const card = e.target.closest('.zukan-card');
-            if (card && !e.target.closest('.like-btn')) openModal(card);
+            if (e.target.closest('.zukan-card-photo')) {
+                const card = e.target.closest('.zukan-card');
+                if (card) openModal(card);
+            }
         });
         modalClose.addEventListener('click', closeModal);
         modal.addEventListener('click', e => { if (e.target === modal) closeModal(); });
