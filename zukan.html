@@ -787,13 +787,13 @@
                 card.dataset.name   = name;
                 card.dataset.price  = price;
                 card.dataset.tag    = tag;
-                card.dataset.photo  = photo;
+                card.dataset.photo  = photo ? 'images/' + photo : '';
                 card.dataset.soup   = soup;
                 card.dataset.noodle = noodle;
 
                 card.innerHTML = `
                     <div class="zukan-card-photo">
-                        <img src="${photo}" alt="" loading="lazy">
+                        <img src="${photo ? 'images/' + photo : ''}" alt="" loading="lazy">
                         ${tag ? `<span class="zukan-card-tag">${tag}</span>` : ''}
                         <span class="rank-badge" id="rank-${id}"></span>
                     </div>
